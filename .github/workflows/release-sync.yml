@@ -1,0 +1,32 @@
+name: release-sync
+
+on:
+  push:
+    tags:
+      - "v*"
+  repository_dispatch:
+    types: [release-sync]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-skill:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: resolve version tag
+        id: ver
+        run: |
+          RAW="${{ github.event.client_payload.version || github.ref_name }}"
+          CLEAN="${RAW#v}"
+          echo "tag=v${CLEAN}" >> $GITHUB_OUTPUT
+
+      - name: create release tag snapshot
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.ver.outputs.tag }}
+          name: Agent Skill Snapshot ${{ steps.ver.outputs.tag }}
+          generate_release_notes: true
