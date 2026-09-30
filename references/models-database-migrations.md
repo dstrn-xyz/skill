@@ -117,8 +117,12 @@ subclasses inherit and merge `static casts` from parent classes automatically.
 | `Model.with('rel1', 'rel2')`                | relation names, array, closure constraints `('posts', q => q.where(...))`, or object `{ rel: (q) => ... }` | `ModelQueryBuilder` (chainable)                                          |
 | `Model.paginate(perPage, pageName?)`        | rows per page (default 10), optional page param name                                                       | `Promise<Paginator>`                                                     |
 | `Model.create(data)`                        | column/value object                                                                                        | `Promise<Model>` (hydrated instance with generated id and defaults)      |
+| `Model.isFillable(key)`                     | attribute name                                                                                             | `boolean` (true if attribute is mass assignable)                          |
+| `Model.filterAttributes(data)`              | column/value object                                                                                        | `object` (shallow copy containing only fillable attributes)               |
+| `Model.getCasts()`                          | none                                                                                                       | `object` (merged cast definitions resolved across inheritance chain)      |
 | `Model.firstOrCreate(attributes, values?)`  | search attributes; optional creation values                                                                | `Promise<Model>` (matched or newly created instance)                     |
 | `Model.updateOrCreate(attributes, values?)` | search attributes; values to update/create                                                                 | `Promise<Model>` (updated or newly created instance)                     |
+| `builder.clone()`                           | none                                                                                                       | `ModelQueryBuilder` (isolated copy preserving relations and constraints) |
 
 ### instance model methods
 
@@ -331,7 +335,9 @@ const query = DB.table('products')
 // or conditions
 query.orWhere('featured', 1)
   .orWhereIn('category_id', [4, 5])
-  .orWhereNull('discontinued_at');
+  .orWhereNull('discontinued_at')
+  .orWhereNotNull('published_at')
+  .orWhereBetween('price', [10, 50]);
 
 // nested where grouping
 const grouped = await DB.table('users')
