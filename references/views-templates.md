@@ -47,15 +47,18 @@ never write custom view compilation scripts, run manual compiler tools, or modif
   <a href="/login" class="link">login</a>
 @endif
 
-<!-- loops -->
+<!-- loops ($index, $first, and $last are automatically available) -->
 @foreach (posts as post)
   <article class="flex-column g-1">
     <h3>{{ post.title }}</h3>
     <p>{{ post.excerpt }}</p>
+    @if ($last)
+      <span>end of feed</span>
+    @endif
   </article>
 @endforeach
 
-<!-- loops with empty state fallback -->
+<!-- loops with empty state fallback ($index, $first, and $last are available) -->
 @forelse (notifications as note)
   <div class="notification-item">{{ note.text }}</div>
 @empty

@@ -53,7 +53,7 @@ load and review the relevant reference guide for deep specifications:
 - [globals, facades, and helpers](./references/globals-facades-helpers.md): complete inventory of global helpers, facades, type checks, and explicit imports
 - [controllers, routing, and responses](./references/controllers-routing-responses.md): controller class conventions, route definitions, group modifiers, validation, and response helpers
 - [models, database, and migrations](./references/models-database-migrations.md): active record model methods, relationships, fluent query builder, raw queries, migrations, and storage disk file management
-- [views and templating](./references/views-templates.md): `.d` template directives, loops, conditionals, layouts, slots, server javascript blocks, and automatic CSRF
+- [views and templating](./references/views-templates.md): `.d` template directives, loops ($index, $first, $last), conditionals, layouts, slots, server javascript blocks, and automatic CSRF
 - [frontend, dspa, and reactivity](./references/frontend-spa-reactivity.md): `dstrn.css` utility classes, dSPA router, `d-wire`, `d-live`, and `dComponent` custom elements
 - [jobs, scheduler, and websockets](./references/jobs-scheduler-websockets.md): worker thread jobs, task scheduler commands, frequencies, and websocket routes
 - [native bridge and plugins](./references/native-plugins-bridge.md): `App.native` APIs, zero config 4-file plugins, and platform simulation tools
