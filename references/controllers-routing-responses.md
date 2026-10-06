@@ -118,6 +118,8 @@ the request object is injected into controller and middleware methods:
 - `req.input('key', fallback)`: unified input resolver (priority: params > body > query)
 - `req.all()`: all unified inputs merged as an object (params > body > query)
 - `req.files`: uploaded multipart files (`req.files.fieldName[0]`)
+- `req.file('key')`: returns first uploaded file for field name or null
+- `req.hasFile('key')`: true if file was uploaded for field name
 - `req.cookies`: parsed cookies object
 - `req.page`: integer from `?page=` query parameter (defaults to 1)
 - `req.isAjax`: true for xhr, fetch, or json accept header

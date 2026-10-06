@@ -1,6 +1,6 @@
 # models, database, and migrations
 
-dframework features an active record ORM, fluent query builder, and migration runner powered by a pooled mysql connection.
+dframework features an active record ORM, fluent query builder, and migration runner supporting mysql, postgresql, and sqlite.
 
 ## models mandate: prioritize models over raw DB access
 
@@ -104,9 +104,11 @@ subclasses inherit and merge `static casts` from parent classes automatically.
 | method                                      | arguments                                                                                                  | returns                                                                  |
 | :------------------------------------------ | :--------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------- |
 | `Model.all()`                               | none                                                                                                       | `Promise<Model[]>` (hydrated instances, `[]` when no rows)               |
+| `Model.query()`                             | none                                                                                                       | `ModelQueryBuilder` (fresh query builder instance)                       |
 | `Model.find(id)`                            | primary key value, or `{ pk1, pk2 }` for composite keys                                                    | `Promise<Model\|null>`                                                   |
 | `Model.findBy<Column>(value)`               | value                                                                                                      | `Promise<Model\|null>` (magic finder e.g. `User.findByEmail('a@b.com')`) |
 | `Model.first(where?)`                       | optional `{ column: value }` object                                                                        | `Promise<Model\|null>`                                                   |
+| `Model.firstWhere(column, op?, val?)`       | column name, operator/value, optional value                                                                | `Promise<Model\|null>`                                                   |
 | `Model.latest(count?, column?)`             | `null` or number; optional column name                                                                     | `null` count: `Promise<Model\|null>`; numeric count: `Promise<Model[]>`  |
 | `Model.where(column, operator, value)`      | column/operator/value, object, or closure                                                                  | `ModelQueryBuilder` (chainable, thenable, async iterable)                |
 | `Model.whereRaw(sql, bindings)`             | raw sql where string, bindings array                                                                       | `ModelQueryBuilder` (chainable)                                          |
@@ -379,13 +381,16 @@ const countries = await DB.table('users').distinct('country').get();
 ### aggregates and calculations
 
 ```javascript
-const totalCount = await DB.table('orders').count(); // COUNT(*)
-const sumTotal = await DB.table('orders').sum('amount'); // SUM(amount)
-const avgRating = await DB.table('reviews').avg('rating'); // AVG(rating)
-const minPrice = await DB.table('products').min('price'); // MIN(price)
-const maxPrice = await DB.table('products').max('price'); // MAX(price)
-const names = await DB.table('users').pluck('name'); // array of column values
-const first = await DB.table('users').where('id', 1).first(); // single row or null
+const hasUsers = await DB.table('users').where('role', 'admin').exists();
+const noUsers = await DB.table('users').where('role', 'banned').doesntExist();
+const totalCount = await DB.table('orders').count();
+const sumTotal = await DB.table('orders').sum('amount');
+const avgRating = await DB.table('reviews').avg('rating');
+const minPrice = await DB.table('products').min('price');
+const maxPrice = await DB.table('products').max('price');
+const names = await DB.table('users').pluck('name');
+const first = await DB.table('users').where('id', 1).first();
+const sql = DB.table('users').where('role', 'admin').toSql();
 ```
 
 ### insert, update, and delete
@@ -496,9 +501,9 @@ export async function down({ Schema }) {
 
 ### column types and modifiers
 
-- column types: `increments`, `bigIncrements`, `integer`, `bigInteger`, `float`, `decimal`, `boolean`, `string`, `text`, `json`, `enum`, `datetime`, `date`, `time`, `timestamps`
+- column types: `id`, `increments`, `bigIncrements`, `integer`, `bigInteger`, `float`, `decimal`, `boolean`, `string`, `text`, `json`, `enum`, `datetime`, `date`, `time`, `timestamps`
 - modifiers: `.nullable()`, `.notNullable()`, `.unsigned()`, `.defaultTo(val)`, `.unique()`, `.index()`, `.primary()`, `.comment('text')`, `.modify()`
-- table alterations: `dropColumn(name)`, `dropColumns(names)`, `renameColumn(from, to)`, `modify(name, type, options)`, `dropIndex(name)`, `dropForeign(name)`
+- table alterations: `dropColumn(name)`, `dropColumns(names)`, `renameColumn(from, to)`, `modify(name, type, options)`, `index(cols, name?)`, `unique(cols, name?)`, `dropIndex(name)`, `dropForeign(name)`
 
 ## storage and file system
 

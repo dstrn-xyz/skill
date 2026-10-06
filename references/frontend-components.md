@@ -18,6 +18,8 @@ when building interfaces, always use dframework components:
 - use `d-color-picker` for interactive hex color selection
 - use `d-toggle` for segmented switches with spring and hover animations
 - use `d-morph` for smooth physics based transitions between element states
+- use `d-link` or `<a d-link>` for client side navigation without full page reloads
+- use `d-form` for ajax form submission, automatic csrf injection, and inline error handling
 - use `d-context-menu` for right click contextual actions with boundary clamping
 
 ## component catalog
@@ -193,6 +195,35 @@ drag and drop file upload container with interactive item list:
 - events: `change` (detail: `File`, `File[]`, or `null`)
 - behavior: drag and drop file upload with file list display, formatted sizes (Bytes, KB, MB, GB), item deletion, and form integration.
 
+### d-form
+
+ajax form container with automatic csrf token injection, validation, and error display:
+
+```html
+<d-form action="/register" method="POST" rules='{"email": "required|email"}' class="flex-column g-1">
+  <input type="email" name="email" placeholder="email address">
+  <input type="password" name="password" placeholder="password">
+  <button type="submit" class="btn">register</button>
+</d-form>
+```
+
+- attributes/props:
+  - `action`: `string` (submission destination url)
+  - `method`: `string` (default `"POST"`, supports `"GET"`, `"POST"`, `"PUT"`, `"DELETE"`)
+  - `rules`: `string` (json string of client side validation rules)
+  - `target`: `string` (selector for html response swapping, defaults to body)
+  - `navigate`: `boolean` (default `false`, pushes to history on html response)
+  - `force-reload`: `string` (`""`, `"true"`, `"all"`, `"success"`, `"error"`)
+  - `callback`: `string` (global window function called on success)
+- programmatic api:
+  - `submit()`: submits form
+  - `serialize()`: returns `FormData` instance
+  - `showErrors(errors)`: displays inline field errors or top error banner
+  - `clearErrors()`: clears active errors
+  - `setDisabled(disabled)`: enables or disables form controls
+- events: `d-submit`, `d-success`, `d-error`, `d-response`
+- behavior: wraps internal form, automatically injects csrf token, disables inputs while submitting, evaluates client side rules, sends multipart when files are present, displays server validation errors inline, and handles redirect or reload flags.
+
 ### d-hamburger
 
 responsive mobile navigation hamburger trigger and full screen navigation overlay with programmable media query breakpoints and multi level sliding subcategory drilldown panels:
@@ -324,6 +355,25 @@ canvas arc spinner:
   - `color`: `string` (stroke color, falls back to `--accent` or text color)
 - programmatic api: `destroy()`
 - behavior: lightweight canvas spinner that automatically pauses animation when scrolled offscreen to conserve CPU and adapts to container dimensions.
+
+### d-link
+
+client side navigation link component and directive:
+
+```html
+<d-link href="/dashboard" class="nav-link">dashboard</d-link>
+<a d-link href="/settings" target="#panel" mode="inner">settings</a>
+```
+
+- attributes/props:
+  - `href`: `string` (destination url)
+  - `target`: `string` (selectors for target elements to swap)
+  - `src`: `string` (selectors for elements to extract from response)
+  - `mode`: `string` (`"inner"`, `"outer"`, `"append"`, `"prepend"`, default `"inner"`)
+  - `preserve-scroll`: `boolean` (default `false`, preserves scroll position)
+  - `d-full-reload`: `boolean` (default `false`, forces standard page reload)
+- programmatic api: `dSPA.navigate(url, options)`
+- behavior: intercepts clicks on `<d-link>` and `<a d-link>`, validates same origin, ignores modifier clicks or external protocols, and fetches content asynchronously to perform dom swaps without full page reloads.
 
 ### d-modal
 
