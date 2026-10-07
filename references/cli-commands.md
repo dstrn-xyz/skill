@@ -1,6 +1,6 @@
 # command line interface reference
 
-dframework provides a built in cli runner invoked with `dstrn <command>`.
+dframework provides a built in cli runner invoked with `dstrn <command>`. all commands except `dstrn init`, `dstrn help`, and `dstrn version` (-v) are gated and require execution within a valid dframework project directory containing `config/app.js`.
 
 ## project lifecycle
 
