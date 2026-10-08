@@ -45,6 +45,14 @@ dframework provides its own custom compiled utility classes. do not assume tailw
 </div>
 ```
 
+### dynamic classes and safelisting
+
+when optimize css is on, utility classes are tree shaken and obfuscated. to prevent dynamic or runtime classes from being removed:
+
+- template literals: prefixes like ``btn-${size}`` are automatically detected and preserved unobfuscated.
+- inline directives: write `/* safelist: card, btn-* */` in views or client scripts. exact tokens preserve that specific class and its responsive variants (such as `md:card`). wildcard tokens ending in `*` preserve all matching prefixed utilities and their responsive variants (such as `md:btn-large`).
+- application config: specify `safelist` in `config/app.js` under `css.safelist: ['card', 'badge-*']`.
+
 ## global frontend dom utilities
 
 available globally in client side scripts:
