@@ -68,7 +68,7 @@ export default class User extends Model {
 
 ### mass assignment protection (`static fillable` and `static guarded`)
 
-models protect against mass assignment vulnerabilities during `create()` and `update()`. by default, when neither `fillable` nor `guarded` is defined (or when `guarded = []`), all attributes are fillable. you may restrict assignable fields using `static fillable` as an allowlist, or `static guarded` as a denylist (or `['*']` to protect all attributes). creating a new model with a predefined primary key and calling `save()` attempts an insert and throws a `DiagnosticError` on collision:
+models protect against mass assignment vulnerabilities during `create()` and `update()`. by default, when neither `fillable` nor `guarded` is defined (or when `guarded = []`), all attributes are fillable. you may restrict assignable fields using `static fillable` as an allowlist, or `static guarded` as a denylist (or `['*']` to protect all attributes). creating a new model with a predefined primary key and calling `save()` attempts an insert and throws an error on collision:
 
 ```javascript
 export default class User extends Model {
