@@ -41,6 +41,7 @@ import Profile from './Profile.js';
 export default class User extends Model {
   static table = 'users'; // optional (defaults to lowercase plural of class)
   static primaryKey = 'id'; // optional (auto detected from schema, composite keys supported)
+  static keyType = 'uuid'; // optional (handles uuid generation on create and save)
   static fillable = ['name', 'email', 'metadata']; // allowed mass-assignable attributes
   static guarded = ['is_admin']; // protected attributes
   static hidden = ['password', 'secret', 'api_key']; // extra attributes hidden from toJSON()
@@ -62,11 +63,12 @@ export default class User extends Model {
 }
 ```
 
+- call `user.getKey()` to retrieve the primary key value regardless of column name
 - default auto hidden fields during `toJSON()` serialization: `password`, `token`, `secret`, `api_key`, `remember_token`
 
 ### mass assignment protection (`static fillable` and `static guarded`)
 
-models protect against mass assignment vulnerabilities during `create()` and `update()`. by default, all attributes are fillable. you may restrict assignable fields using `static fillable` (whitelisting) or `static guarded` (blacklisting):
+models protect against mass assignment vulnerabilities during `create()` and `update()`. by default, all attributes except primary keys are fillable (`guarded = []`). primary keys (`id` or custom `primaryKey`) are guarded by default and cannot be mass assigned unless explicitly included in `static fillable` and absent from `static guarded`. creating a new model with a predefined primary key and calling `save()` attempts an insert and throws a `DiagnosticError` on collision. you may restrict assignable fields using `static fillable` (whitelisting) or `static guarded` (blacklisting):
 
 ```javascript
 export default class User extends Model {
@@ -119,9 +121,9 @@ subclasses inherit and merge `static casts` from parent classes automatically.
 | `Model.with('rel1', 'rel2')`                | relation names, array, closure constraints `('posts', q => q.where(...))`, or object `{ rel: (q) => ... }` | `ModelQueryBuilder` (chainable)                                          |
 | `Model.paginate(perPage, pageName?)`        | rows per page (default 10), optional page param name                                                       | `Promise<Paginator>`                                                     |
 | `Model.create(data)`                        | column/value object                                                                                        | `Promise<Model>` (hydrated instance with generated id and defaults)      |
-| `Model.isFillable(key)`                     | attribute name                                                                                             | `boolean` (true if attribute is mass assignable)                          |
-| `Model.filterAttributes(data)`              | column/value object                                                                                        | `object` (shallow copy containing only fillable attributes)               |
-| `Model.getCasts()`                          | none                                                                                                       | `object` (merged cast definitions resolved across inheritance chain)      |
+| `Model.isFillable(key)`                     | attribute name                                                                                             | `boolean` (true if attribute is mass assignable)                         |
+| `Model.filterAttributes(data)`              | column/value object                                                                                        | `object` (shallow copy containing only fillable attributes)              |
+| `Model.getCasts()`                          | none                                                                                                       | `object` (merged cast definitions resolved across inheritance chain)     |
 | `Model.firstOrCreate(attributes, values?)`  | search attributes; optional creation values                                                                | `Promise<Model>` (matched or newly created instance)                     |
 | `Model.updateOrCreate(attributes, values?)` | search attributes; values to update/create                                                                 | `Promise<Model>` (updated or newly created instance)                     |
 | `builder.clone()`                           | none                                                                                                       | `ModelQueryBuilder` (isolated copy preserving relations and constraints) |
