@@ -42,7 +42,7 @@ export default class User extends Model {
   static table = 'users'; // optional (defaults to lowercase plural of class)
   static primaryKey = 'id'; // optional (auto detected from schema, composite keys supported)
   static keyType = 'uuid'; // optional (handles uuid generation on create and save)
-  static fillable = ['name', 'email', 'metadata']; // allowed mass-assignable attributes
+  static fillable = ['name', 'email', 'metadata']; // allowed mass assignable attributes
   static guarded = ['is_admin']; // protected attributes
   static hidden = ['password', 'secret', 'api_key']; // extra attributes hidden from toJSON()
   static casts = {
@@ -68,7 +68,7 @@ export default class User extends Model {
 
 ### mass assignment protection (`static fillable` and `static guarded`)
 
-models protect against mass assignment vulnerabilities during `create()` and `update()`. by default, all attributes except primary keys are fillable (`guarded = []`). primary keys (`id` or custom `primaryKey`) are guarded by default and cannot be mass assigned unless explicitly included in `static fillable` and absent from `static guarded`. creating a new model with a predefined primary key and calling `save()` attempts an insert and throws a `DiagnosticError` on collision. you may restrict assignable fields using `static fillable` (whitelisting) or `static guarded` (blacklisting):
+models protect against mass assignment vulnerabilities during `create()` and `update()`. by default, when neither `fillable` nor `guarded` is defined (or when `guarded = []`), all attributes are fillable. you may restrict assignable fields using `static fillable` as an allowlist, or `static guarded` as a denylist (or `['*']` to protect all attributes). creating a new model with a predefined primary key and calling `save()` attempts an insert and throws a `DiagnosticError` on collision:
 
 ```javascript
 export default class User extends Model {
