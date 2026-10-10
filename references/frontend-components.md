@@ -96,7 +96,7 @@ searchable, extensible select component with automatic floating placement:
   - `clearOptions()`: clears all options
   - `destroy()`: cleans up dropdown
   - `.value`, `.options`, `.placeholder`, `.allowSearch`, `.allowInput`, `.isHorizontal`
-- events: `change` (detail: value), `input`, `add` (detail: item), `open`, `close`
+- events: `change` (detail: value), `add` (detail: item), `open`, `close`
 - behavior: parses child `<option>` tags, calculates viewport space to open above or below without overflowing, supports full keyboard navigation and search filtering.
 
 ### d-context-menu

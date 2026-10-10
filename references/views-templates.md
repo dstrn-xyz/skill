@@ -16,6 +16,24 @@ view compilation is handled 100% automatically by the framework runtime (`ViewEn
 
 never write custom view compilation scripts, run manual compiler tools, or modify core framework rendering logic. there is zero build step or manual compilation script needed for views.
 
+## directive reference
+
+| directive | description |
+| :-------- | :---------- |
+| `@extends('layout')` | extends a parent layout template |
+| `@section('name') ... @endsection` | defines a section of content for a layout placeholder |
+| `@yield('name')` | renders a named section placeholder in a layout |
+| `@include('partial')` | renders a partial view inheriting parent variables |
+| `@if (expr) ... @elseif (expr) ... @else ... @endif` | conditional rendering |
+| `@foreach (arr as item) ... @endforeach` | array iteration |
+| `@forelse (arr as item) ... @empty ... @endforelse` | array iteration with empty fallback |
+| `@for (init; cond; step) ... @endfor` | loop iteration |
+| `@pagination(paginator, spa, target)` | renders pagination navigation controls |
+| `@js ... @endjs` | executes localized presentation compute in template |
+| `@json(variable)` | serializes server data to json in script tags or attributes |
+| `@t('key', params)` | renders translated string |
+| `@ruby('text', 'rt')` | renders pronunciation ruby tags |
+
 ## basic output and escaping
 
 - `{{ expression }}`: html escaped output (safe against xss)

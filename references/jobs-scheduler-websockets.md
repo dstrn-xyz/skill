@@ -113,7 +113,7 @@ Socket.on('ping', () => json({ pong: true }));
 
 // group with authentication middleware
 Socket.group({ middleware: ['AuthMiddleware@requireAuth'] }, (auth) => {
-  auth.on('chat:message', async (req) => {
+  auth.on('chat:message', async (req, res, ws) => {
     const message = await Message.create({
       user_id: Auth.user().id,
       content: req.body.content
@@ -124,7 +124,7 @@ Socket.group({ middleware: ['AuthMiddleware@requireAuth'] }, (auth) => {
       id: message.id,
       user: Auth.user().name,
       content: message.content
-    }, req.ws);
+    }, ws);
 
     return json({ success: true });
   }).targets(['#chat-messages']);
@@ -133,9 +133,11 @@ Socket.group({ middleware: ['AuthMiddleware@requireAuth'] }, (auth) => {
 
 - `req` in socket handlers contains session data, cookies, and `Auth.user()`
 - `.targets(['#selector'])` enforces that client morph updates are only applied to authorized dom targets
-- `Socket.toUser(userId, event, data)` / `Socket.toUser(userId).emit(event, data)` targets a specific user across connections
-- `Socket.toUsers([id1, id2], event, data)` targets multiple users
-- `Socket.toSession(sessionId, event, data)` targets a specific session id
-- `Socket.sendTo(ws, event, data)` targets a specific connection instance
-- `Socket.to(target).emit(event, data)` provides unified flexible targeting (accepts user, user id, array, session, or ws)
+- `Socket.toUser(userId, event, data)` / `Socket.toUserState(userId, target, state)` / `Socket.toUser(userId).emit(event, data)` targets a specific user across connections
+- `Socket.toUsers([id1, id2], event, data)` / `Socket.toUsersState([id1, id2], target, state)` targets multiple users
+- `Socket.toSession(sessionId, event, data)` / `Socket.toSessionState(sessionId, target, state)` targets a specific session id
+- `Socket.to(ws, event, data)` / `Socket.to(ws).emit(event, data)` targets a specific connection instance directly
+- `Socket.guard(guard).toUser(userId, event, data)` / `Socket.guard(guard).toUsers([id1, id2], event, data)` scopes dispatch to an authentication guard
+- `Socket.toGuardUser(guard, userId, event, data)` / `Socket.toGuardUserState(guard, userId, target, state)` targets a specific user on a named guard
+- `Socket.toGuardUsers(guard, [id1, id2], event, data)` / `Socket.toGuardUsersState(guard, [id1, id2], target, state)` targets multiple users on a named guard
 - all targeted socket methods called inside jobs are automatically relayed to the main process via IPC

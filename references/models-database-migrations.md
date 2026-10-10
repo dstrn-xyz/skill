@@ -401,8 +401,8 @@ const sql = DB.table('users').where('role', 'admin').toSql();
 // single insert
 const { insertId } = await DB.table('logs').insert({ action: 'login', ip: '127.0.0.1' });
 
-// batch insert returning array of inserted IDs
-const ids = await DB.table('tags').insert([
+// batch insert returning mutation result object
+const result = await DB.table('tags').insert([
   { name: 'electronics' },
   { name: 'audio' }
 ]);
@@ -431,7 +431,7 @@ const cached = await DB.query('SELECT * FROM settings', [], { cache: true, ttl: 
 
 // raw sql literals for updates
 import { SqlHelpers } from 'dframework';
-await DB.update('users', { updated_at: SqlHelpers.raw('NOW()') }, { id: 1 });
+await DB.table('users').where('id', 1).update({ updated_at: SqlHelpers.raw('NOW()') });
 ```
 
 ## migrations
