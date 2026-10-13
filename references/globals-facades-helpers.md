@@ -14,6 +14,7 @@ these objects are always available on globalThis:
 - `Job`: background queue facade (`Job.dispatch('JobName', payload, { timeout, tries, backoff })`)
 - `Log`: application logging facade (`Log.debug`, `Log.info`, `Log.warn`, `Log.error`, `Log.table`)
 - `Config`: configuration facade (`Config.get('app.key', default)`, `Config.has('app.key')`, `Config.register(name, config)`)
+- `app(key)`: application instance helper (`app()`, `app('db')`, `app('logger')`, `app('env')`)
 
 ```javascript
 // good (in any controller, middleware, or job)
