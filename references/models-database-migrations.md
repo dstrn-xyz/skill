@@ -45,6 +45,7 @@ export default class User extends Model {
   static fillable = ['name', 'email', 'metadata']; // allowed mass assignable attributes
   static guarded = ['is_admin']; // protected attributes
   static hidden = ['password', 'secret', 'api_key']; // extra attributes hidden from toJSON()
+  static visible = null; // optional allowlist for toJSON() serialization (overrides hidden)
   static casts = {
     metadata: 'json',
     tags: 'array',
@@ -64,7 +65,8 @@ export default class User extends Model {
 ```
 
 - call `user.getKey()` to retrieve the primary key value regardless of column name
-- default auto hidden fields during `toJSON()` serialization: `password`, `token`, `secret`, `api_key`, `remember_token`
+- default auto hidden fields during `toJSON()` serialization: `password`, `token`, `secret`, `api_key`, `remember_token` (inherited across subclasses via `Model.getHidden()`, applies only to serialization and never restricts direct property access like `user.password`)
+- `static visible = [...]` acts as an allowlist for `toJSON()` serialization (filtering attributes, eager loaded relations, and pivot data), ignoring `hidden` when defined
 
 ### mass assignment protection (`static fillable` and `static guarded`)
 
@@ -140,6 +142,8 @@ subclasses inherit and merge `static casts` from parent classes automatically.
 | `instance.hash(field)`                        | attribute name on the instance                                          | `Promise<void>` (mutates instance in place with bcrypt hash)                          |
 | `instance.load('rel1', 'rel2')`               | relation names                                                          | `Promise<Model>` (lazy eager loads relations on existing instance)                    |
 | `instance.toJSON()`                           | none                                                                    | plain object with hidden attributes removed and relations serialized                  |
+| `Model.getHidden()`                           | none                                                                    | array of all hidden attributes inherited across the prototype chain                   |
+| `Model.getVisible()`                          | none                                                                    | array of all visible attributes defined on the model or null                          |
 
 ### retrieving records
 
@@ -216,10 +220,15 @@ export default class Post extends Model {
 ```
 
 - many to many relationships use `this.belongsToMany(Role, pivotTable, foreignPivotKey, relatedPivotKey)`
-- pivot table names default to alphabetically sorted snake_case model names (e.g. `role_user`), foreign keys to `${singular}_id`
+
+- pivot table names default to alphabetically sorted snake\_case model names (e.g. `role_user`), foreign keys to `${singular}_id`
+
 - load additional pivot columns using `.withPivot('expires_at', 'level')`
+
 - pivot data attaches cleanly to `model.pivot` without polluting primary model attributes
+
 - pivot management helpers on relation proxy:
+
   - `await user.roles().attach(roleId, { level: 'admin' })` (accepts scalar, array of IDs, or object map)
   - `await user.roles().detach(roleId)` (or `detach([1, 2])` or `detach()` for all)
   - `await user.roles().sync({ 1: { level: 'admin' }, 2: { level: 'editor' } })` (returns `{ attached, detached, updated }`)
@@ -262,7 +271,7 @@ export default class Post extends Model {
 ### relationship caching and query rules
 
 1. **automatic in memory caching**: when a relationship is preloaded with `Model.with('relation')` or `instance.load('relation')`, awaiting the relationship method (`await model.relation()`) or accessing the property (`model.relation`) resolves instantly from in memory cache with zero database queries.
-2. **never access private `_relations`**: developers and application code must never inspect or access `this._relations` directly (e.g. `this._relations && 'author' in this._relations ? this._relations.author : await this.author()` is an anti pattern). always call `await this.author()` or use `Promise.all([this.author(), this.comments()])`.
+2. **never access private** **`_relations`**: developers and application code must never inspect or access `this._relations` directly (e.g. `this._relations && 'author' in this._relations ? this._relations.author : await this.author()` is an anti pattern). always call `await this.author()` or use `Promise.all([this.author(), this.comments()])`.
 3. **unconstrained queries**: calling an unconstrained relation method on a model with `null` foreign/local keys (e.g. `track.genre()` when `genre_id` is null, or on unsaved models) immediately resolves to `null` (for `belongsTo`/`hasOne`) or `[]` (for `hasMany`/`belongsToMany`) without executing unconstrained full table database queries.
 4. **constrained queries**: chaining query constraints (e.g. `await post.comments().where('approved', true).get()`) marks the query builder as constrained and executes a targeted SQL query with the specified filters without corrupting or returning stale cached memory.
 5. **dual accessor proxies**: relation properties are callable proxies; `Array.isArray(post.comments)` evaluates to `false`. iterate directly or `await post.comments` without manual `Array.isArray` branching.
