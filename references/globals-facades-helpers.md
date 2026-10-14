@@ -45,6 +45,7 @@ only call these from within request context (controllers, middlewares, socket ha
 - `url('/path/:id', { id: 10 })`: builds path with parameter substitution
 - `asset('css/app.css')`: returns root relative asset url
 - `storage('avatars/user.jpg')`: returns web accessible storage url
+- `emptyImage()`: returns a 1x1 transparent gif data uri placeholder
 - `old('fieldName', default)`: reads flashed input from previous request in templates
 
 ## global validation and sanitization helpers

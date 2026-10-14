@@ -96,7 +96,7 @@ searchable, extensible select component with automatic floating placement:
   - `clearOptions()`: clears all options
   - `destroy()`: cleans up dropdown
   - `.value`, `.options`, `.placeholder`, `.allowSearch`, `.allowInput`, `.isHorizontal`
-- events: `change` (detail: value), `add` (detail: item), `open`, `close`
+- events: `change` (detail: value), `open`, `close`
 - behavior: parses child `<option>` tags, calculates viewport space to open above or below without overflowing, supports full keyboard navigation and search filtering.
 
 ### d-context-menu
@@ -121,7 +121,7 @@ right click contextual menu with automatic boundary collision clamping:
   - `open(e)`: opens menu with optional pointer event coordinates
   - `close(e)`: closes menu
   - `toggle(e)`: toggles menu
-- events: `click` (detail: clicked element)
+- events: `click` (detail: clicked element), `open`, `close`
 - behavior: opens on right-click within its parent container, bounds coordinates so the menu never overflows parent or screen edges, dismisses on outside click without triggering actions on underlying elements. when creating dynamically, listen to `'click'` directly on the component element.
 
 ### d-drawer

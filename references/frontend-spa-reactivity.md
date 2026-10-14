@@ -32,7 +32,7 @@ dframework provides its own custom compiled utility classes. do not assume tailw
 - border: `.border-s`, `.border-m`, `.border-bottom-s`, `.border-top-s`
 - shadow: `.shadow-s`, `.shadow-m`, `.shadow-l`
 - cursor and effects: `.pointer`, `.hover:bg-accent`, `.hover:text-accent`, `.shadow-hover-s`
-- responsive prefixes: `sm:` (min 480px), `md:` (min 768px), `lg:` (min 1024px), `xl:` (min 1280px)
+- responsive prefixes: `sm:` (min 480px), `md:` (min 768px), `lg:` (min 1024px), `xl:` (min 1280px), `xxl:` (min 1536px), `ultra:` (min 1920px)
 
 ```html
 <!-- card layout example -->
@@ -41,7 +41,7 @@ dframework provides its own custom compiled utility classes. do not assume tailw
     <h3 class="fs-12 bold">system overview</h3>
     <p class="fs-09">live server telemetry</p>
   </div>
-  <button class="pointer bdr-05 p-05 bg-accent text-white hover:bg-accent-dark">view</button>
+  <button class="pointer bdr-05 p-05 bg-accent text-white hover:bg-accent-d">view</button>
 </div>
 ```
 

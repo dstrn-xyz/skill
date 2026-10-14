@@ -112,7 +112,7 @@ export default class StreamController {
 
 the request object is injected into controller and middleware methods:
 
-- `req.body`: parsed json or form fields on mutating requests (post, put, patch, delete)
+- `req.body`: parsed json or form fields on mutating requests (post, put, delete)
 - `req.query`: parsed query parameters object
 - `req.params`: route url parameters (`:id` in route paths)
 - `req.input('key', fallback)`: unified input resolver (priority: params > body > query)
