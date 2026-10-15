@@ -189,6 +189,7 @@ Route.get('/users', 'app.UserController@index').name('users.index');
 Route.get('/users/:id', 'app.UserController@show').name('users.show');
 Route.post('/users', 'app.UserController@store').name('users.store');
 Route.put('/users/:id', 'app.UserController@update').name('users.update');
+Route.patch('/users/:id', 'app.UserController@patch').name('users.patch');
 Route.delete('/users/:id', 'app.UserController@destroy').name('users.destroy');
 
 // route groups with prefix, middleware, domain, basic auth, shield, or csrf
