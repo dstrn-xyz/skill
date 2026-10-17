@@ -35,7 +35,7 @@ only call these from within request context (controllers, middlewares, socket ha
 - `back(fallback, code, force)`: redirects to previous url
 - `abort(code, message)`: halts execution and sends http error (json for ajax, html for browser)
 - `status(code)`: sets status code and returns chainable builder (`status(422).json({ error: 'invalid' })`)
-- `cookie(name, value, options)`: sets response cookie
+- `cookie(name, value, options)`: sets response cookie (supports `maxAge` in seconds; booleans like `maxAge: false` are ignored for session cookies)
 - `stream(writer)`: streams response chunks with backpressure handling (writer signature: `async (write, close) => void`)
 
 ## global url and routing helpers

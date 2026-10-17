@@ -59,7 +59,7 @@ available globally in client side scripts:
 - `select(selector, parent)`: `querySelector` shorthand
 - `selectAll(selector, parent)`: `querySelectorAll` returning true array
 - `listen(element, event, handler)`: adds event listener, returns cleanup function
-- `addClass(element, className)` / `removeClass(element, className)` / `toggleClass(element, className)`
+- `addClass(className, element)` / `removeClass(className, element)` / `toggleClass(className, element)` / `hasClass(className, element)` (returns false if element is null or missing)
 - `notify(message, duration)`: toast notification
 - `modal(htmlString, callback)`: display interactive modal dialog
 - `createFragment(html)`: parses html into a cached template fragment
