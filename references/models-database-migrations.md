@@ -636,5 +636,6 @@ in production (`APP_ENV=production`), interactive confirmation prompts are displ
 
 ```bash
 dstrn migrate --force
+dstrn migrate:rollback --force
 dstrn seed --force
 ```
