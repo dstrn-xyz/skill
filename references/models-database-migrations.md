@@ -342,7 +342,7 @@ const query = DB.table('products')
   .whereColumn('updated_at', '>', 'created_at') // compare two columns
   .whereHashed('pin', '1234') // bcrypt hashed comparison
   .whereExists((q) => { // subquery EXISTS
-    q.table('reviews').whereColumn('reviews.product_id', 'products.id').where('rating', '>=', 4);
+    q.from('reviews').whereColumn('reviews.product_id', 'products.id').where('rating', '>=', 4);
   });
 
 // or conditions
@@ -350,7 +350,8 @@ query.orWhere('featured', 1)
   .orWhereIn('category_id', [4, 5])
   .orWhereNull('discontinued_at')
   .orWhereNotNull('published_at')
-  .orWhereBetween('price', [10, 50]);
+  .orWhereBetween('price', [10, 50])
+  .orWhereColumn('updated_at', '>', 'created_at');
 
 // nested where grouping
 const grouped = await DB.table('users')
@@ -381,7 +382,7 @@ const stats = await DB.table('orders')
 const users = await DB.table('users')
   .select('id', 'name')
   .selectSub((q) => {
-    q.table('orders').count().whereColumn('orders.user_id', 'users.id');
+    q.from('orders').count().whereColumn('orders.user_id', 'users.id');
   }, 'orders_count')
   .get();
 

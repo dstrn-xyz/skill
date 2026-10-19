@@ -224,6 +224,12 @@ Route.prefix('/webhooks')
 Route.domain('api.example.com', (api) => {
   api.get('/health', () => json({ status: 'healthy' }));
 });
+Route.port(8080, (internal) => {
+  internal.get('/metrics', 'MetricsController@export');
+});
+
+// head request routes
+Route.head('/ping', () => status(200));
 
 // basic auth protection (chainable builder, single route modifier, or custom validator)
 Route.basicAuth('admin', 'secret').get('/metrics', 'MetricsController@export');
@@ -237,10 +243,13 @@ Route.get('/posts/:year/:slug', 'PostController@show').where({
   slug: '^[a-z0-9-]+$'
 });
 
-// individual route modifier overrides
+// individual route modifier overrides and compiler hints
 Route.post('/webhooks/stripe', 'WebhookController@handle')
   .csrf(false)
-  .shield(false);
+  .shield(false)
+  .log(true)
+  .views(['webhooks.receipt'])
+  .profile({ needsSession: false });
 ```
 
 ### route naming and matching

@@ -159,9 +159,9 @@ user components in `public/js/components/` can override any built in UI componen
 
 ## zero build automatic asset compilation
 
-the framework compiles `public/js/dstrn.js` and `public/css/dstrn.css` automatically on startup when running `dstrn serve`.
+the framework compiles `storage/framework/public/js/dstrn.js` and `storage/framework/public/css/dstrn.css` automatically on startup when running `dstrn serve` (served at `/js/dstrn.js` and `/css/dstrn.css`).
 
-- never edit `public/js/dstrn.js` or `public/css/dstrn.css` directly; changes will be overwritten on next server start
+- never edit compiled `dstrn.js` or `dstrn.css` directly; changes will be overwritten on next server start
 - there are no manual frontend build or compile commands (e.g. `npm run build` or `dstrn build`); the compiler runs on boot
 - if a rebuild is needed, ask the user to restart their development server
 - author modular components in `public/js/components/<ComponentName>.js`

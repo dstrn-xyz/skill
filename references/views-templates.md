@@ -28,7 +28,7 @@ never write custom view compilation scripts, run manual compiler tools, or modif
 | `@foreach (arr as item) ... @endforeach` | array iteration |
 | `@forelse (arr as item) ... @empty ... @endforelse` | array iteration with empty fallback |
 | `@for (init; cond; step) ... @endfor` | loop iteration |
-| `@pagination(paginator, spa, target)` | renders pagination navigation controls |
+| `@pagination(paginator, spa, target)` / `@endpagination` | renders pagination navigation controls (standalone or custom markup block) |
 | `@js ... @endjs` | executes localized presentation compute in template |
 | `@json(variable)` | serializes server data to json in script tags or attributes |
 | `@t('key', params)` | renders translated string |

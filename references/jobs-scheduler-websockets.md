@@ -140,4 +140,5 @@ Socket.group({ middleware: ['AuthMiddleware@requireAuth'] }, (auth) => {
 - `Socket.guard(guard).toUser(userId, event, data)` / `Socket.guard(guard).toUsers([id1, id2], event, data)` scopes dispatch to an authentication guard
 - `Socket.toGuardUser(guard, userId, event, data)` / `Socket.toGuardUserState(guard, userId, target, state)` targets a specific user on a named guard
 - `Socket.toGuardUsers(guard, [id1, id2], event, data)` / `Socket.toGuardUsersState(guard, [id1, id2], target, state)` targets multiple users on a named guard
+- `Socket.revokeUser(userOrId, guardName)` revokes authentication state across active websocket connections for a user
 - all targeted socket methods called inside jobs are automatically relayed to the main process via IPC
