@@ -101,7 +101,7 @@ models support automatic attribute casting on hydration and persistence:
 | `date`, `datetime`, `timestamp` | converts strings to `Date` objects on hydration and formats to standard sql timestamp format on save.                                                                                                                                                                     |
 | `string`                        | casts values to primitive strings.                                                                                                                                                                                                                                        |
 
-subclasses inherit and merge `static casts` from parent classes automatically.
+subclasses inherit and merge `static casts` from parent classes automatically. plain javascript objects and arrays are also automatically serialized to json strings on write and hydrated on read even without explicit `static casts`, unless overridden with an explicit `'string'` cast.
 
 ### static model methods
 
