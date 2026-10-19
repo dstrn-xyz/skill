@@ -81,6 +81,9 @@ only call these from within request context (controllers, middlewares, socket ha
 - `isUndefined(val)`, `isNull(val)`
 - `random(min, max)`: inclusive random integer
 - `now()`: current timestamp in iso format
+- `formatTime(s)`: formats seconds into mm:ss
+- `formatDate(date, includeTime = true)`: formats date into YYYY-MM-DD or YYYY-MM-DD HH:mm:ss in utc
+- `localizeDate(date, includeTime = true)`: formats date in current timezone
 - `escapeHtml(val)`: escapes html special characters
 - `escapeJs(val)`: escapes javascript string and template literal special characters
 
