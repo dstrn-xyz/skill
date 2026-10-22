@@ -26,7 +26,7 @@ use the global `Job` facade from anywhere (controllers, middlewares, socket hand
 
 ```javascript
 // in a controller
-await Job.dispatch('SendWelcomeEmailJob', { userId: user.id }, { timeout: 30000, tries: 3 });
+Job.dispatch('SendWelcomeEmailJob', { userId: user.id }, { timeout: 30000, tries: 3 });
 ```
 
 - payload must be json serializable (pass record ids instead of large active record model instances)

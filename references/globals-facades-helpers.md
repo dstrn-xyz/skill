@@ -22,7 +22,7 @@ const user = Auth.user();
 const admin = Auth.guard('admin').user();
 const setting = Config.get('app.env');
 Log.info('user action registered', { id: user?.id });
-await Job.dispatch('SendEmailJob', { userId: 1 }, { timeout: 30000, tries: 3 });
+Job.dispatch('SendEmailJob', { userId: 1 }, { timeout: 30000, tries: 3 });
 ```
 
 ## global response helpers (never import)

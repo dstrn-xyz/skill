@@ -138,6 +138,7 @@ subclasses inherit and merge `static casts` from parent classes automatically. p
 | `instance.update(data)`                       | column/value object                                                     | `Promise<void>` (mutates instance attributes in place and executes UPDATE)            |
 | `instance.increment(column, amount?, extra?)` | column name, optional amount (default 1), optional extra columns object | `Promise<object>` (mutates instance attribute in place and executes increment UPDATE) |
 | `instance.decrement(column, amount?, extra?)` | column name, optional amount (default 1), optional extra columns object | `Promise<object>` (mutates instance attribute in place and executes decrement UPDATE) |
+| `instance.touch()`                            | none                                                                    | `Promise<boolean>` (updates updated_at timestamp in database)                         |
 | `instance.delete()`                           | none                                                                    | `Promise<void>` (deletes row by primary key)                                          |
 | `instance.hash(field)`                        | attribute name on the instance                                          | `Promise<void>` (mutates instance in place with bcrypt hash)                          |
 | `instance.load('rel1', 'rel2')`               | relation names                                                          | `Promise<Model>` (lazy eager loads relations on existing instance)                    |
@@ -575,8 +576,8 @@ await Storage.disk('local').put('exports/report.csv', 'id,name\n1,alice');
 // write buffer
 await Storage.disk().put('images/logo.png', imageBuffer);
 
-// direct multipart file upload handling (req.files.avatar from form upload)
-const filePath = await Storage.disk().put('avatars/user.jpg', req.files.avatar);
+// direct multipart file upload handling (req.file('avatar') from form upload)
+const filePath = await Storage.disk().put('avatars/user.jpg', req.file('avatar'));
 ```
 
 ### retrieving files

@@ -153,6 +153,19 @@ dComponent.define(UserBadge);
 - **static fragment caching & safe dom insertion:** `dComponent.fragment(html)` caches parsed templates in an LRU map. `dComponent.appendMany(target, ...nodes)` mounts multiple nodes in a single batched DOM insertion. `this.setChildren(content)` replaces component child nodes safely using cached template fragments.
 - **3-phase microtask update queue:** state and prop mutations coalesce into an ordered 3-phase microtask flush: attribute sync, surgical render, effects and form sync.
 
+### lifecycle hooks
+
+| method | timing | description |
+| :--- | :--- | :--- |
+| `template()` | before mount | returns initial html string to populate inner dom |
+| `mount()` | on first connection | initializes component logic and registers effects |
+| `connected()` | on every connection | called whenever element is attached to document |
+| `render()` | on state/prop change | performs surgical dom updates |
+| `onPropChanged(name, old, new)` | on prop mutation | reacts to specific property changes |
+| `onscreen()` | on viewport entry | called when component enters viewport via intersection observer |
+| `offscreen()` | on viewport exit | called when component leaves viewport via intersection observer |
+| `destroy()` | on disconnection | teardown hook called when element is removed from dom |
+
 ### overriding built in components
 
 user components in `public/js/components/` can override any built in UI component (such as `dCheckbox.js`). `dComponent` itself is immutable and cannot be overwritten by user code.
