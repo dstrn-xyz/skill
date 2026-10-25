@@ -28,6 +28,7 @@ enforce these separation of concerns rules (checked by `dstrn lint` and `dstrn d
 - models must never import or depend on controllers
 - middlewares must never depend on controllers
 - routes should reference controller strings rather than instantiating models directly
+- jobs must never be imported directly (dispatch via Job.dispatch instead)
 - user projects must never modify framework core source files (`dframework/core/` or `node_modules/dframework/`)
 - user projects must never run internal framework test suites (`npm test` in `dframework/`)
 

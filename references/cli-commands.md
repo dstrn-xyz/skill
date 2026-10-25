@@ -1,6 +1,6 @@
 # command line interface reference
 
-dframework provides a built in cli runner invoked with `dstrn <command>`. all commands except `dstrn init`, `dstrn help` (-h), and `dstrn version` (-v) are gated and require execution within a valid dframework project directory containing `config/app.js`.
+dframework provides a built in cli runner invoked with `dstrn <command>`. all commands except `dstrn init`, `dstrn help` (-h, `--help`, `dstrn help <command>`, `dstrn <command> --help`), and `dstrn version` (-v, `--version`) are gated and require execution within a valid dframework project directory containing `config/app.js`.
 
 ## project lifecycle
 
@@ -8,7 +8,7 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 - `dstrn serve`: boots the development server with live reload and watcher
 - `dstrn tinker [code]`: interactive repl with all models, facades, and helpers preloaded
 - `dstrn key:generate`: generates and updates the 32 byte APP_KEY encryption key in .env
-- `dstrn run <command>`: runs a user command from console/commands/
+- `dstrn run <command>`: runs a user command from console/commands/ (resolves `${name}.js` or `${name}Command.js`, forwards options and arguments)
 - `dstrn dispatch <job> [--payload=json]`: queues a background job from the command line
 
 ## database and migrations

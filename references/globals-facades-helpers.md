@@ -94,7 +94,9 @@ only these classes and utilities need explicit import:
 ```javascript
 import { Model } from 'dframework';          // for models/
 import { Paginator } from 'dframework';      // for manual pagination construction
-import { Storage } from 'dframework';        // for disk file operations
+import { Storage } from 'dframework';        // for disk file operations (supports direct Storage.put, Storage.get, etc.)
+import { StorageDisk } from 'dframework';    // for custom disk instances
+import { Log } from 'dframework';            // for logging outside request context
 import { RateLimiter } from 'dframework';    // for rate limiting middleware
 import { Hash } from 'dframework';           // for manual bcrypt verify or make
 import { Locale } from 'dframework';         // for Locale.set / Locale.get

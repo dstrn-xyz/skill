@@ -59,9 +59,9 @@ scheduled tasks are defined in `console/Schedule.js`. the scheduler starts autom
 ```javascript
 // console/Schedule.js
 export default function (scheduler) {
-  // schedule command classes from console/commands/
+  // schedule command classes from console/commands/ (supports Name.js and NameCommand.js)
   scheduler.command('PruneExpiredSessions').hourly();
-  scheduler.command('GenerateDailyReport').daily();
+  scheduler.command('GenerateDailyReport').args(['--format=pdf']).daily();
 
   // schedule inline closures
   scheduler.command(async () => {
@@ -100,8 +100,8 @@ export default class PruneExpiredSessions {
 }
 ```
 
-- scheduled in `console/Schedule.js`
-- run manually from CLI: `dstrn run PruneExpiredSessions [args]` (supports `--key value`, `--key=value`, boolean flags, and positional args accessible via `this.option()`, `this.hasOption()`, and `this.argument()`)
+- scheduled in `console/Schedule.js` (supports chainable `.args(['--option', 'val'])`)
+- run manually from CLI: `dstrn run PruneExpiredSessions [args]` (resolves both `${name}.js` and `${name}Command.js`, supports `--key value`, `--key=value`, boolean flags, and positional args accessible via `this.option()`, `this.hasOption()`, and `this.argument()`)
 
 ## websockets (socket router)
 

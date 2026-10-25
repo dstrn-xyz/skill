@@ -403,6 +403,7 @@ const minPrice = await DB.table('products').min('price');
 const maxPrice = await DB.table('products').max('price');
 const names = await DB.table('users').pluck('name');
 const first = await DB.table('users').where('id', 1).first();
+const paged = await DB.table('logs').orderBy('created_at', 'DESC').paginate(15);
 const sql = DB.table('users').where('role', 'admin').toSql();
 ```
 
