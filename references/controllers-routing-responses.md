@@ -173,7 +173,7 @@ Route.group({ middleware: ['AuthMiddleware@requireAuth'] }, (r) => {
 // inline array syntax (all entries except last are middleware)
 Route.get('/profile', ['AuthMiddleware@requireAuth', 'UserProfileController@show']);
 
-// instantiated middleware objects (like RateLimiter: windowMs, max, message, keyGenerator, trustedProxies, maxEntries)
+// instantiated middleware objects (like RateLimiter: windowMs, max, message, keyGenerator, trustedProxies, maxEntries, headers)
 import { RateLimiter } from 'dframework';
 const limiter = new RateLimiter({ windowMs: 60000, max: 10, maxEntries: 100000 });
 Route.middleware(limiter).post('/login', 'AuthController@login');

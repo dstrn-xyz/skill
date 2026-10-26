@@ -49,11 +49,11 @@ always use the `Locale` facade. never write to `locale` cookies or parse request
 ```javascript
 import { Locale } from 'dframework';
 
-// set locale permanently for user (writes cookie and session)
-Locale.set('ja');
+// set locale permanently for user (writes 1 year cookie and session)
+await Locale.set('ja');
 
 // set locale for current request only (without modifying cookie or session)
-Locale.set('fr', true);
+await Locale.set('fr', true);
 
 // get active locale for current request
 const current = Locale.get(); // 'ja'
