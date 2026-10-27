@@ -19,8 +19,8 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 - `dstrn migrate:make <table>`: creates a timestamped migration file
 - `dstrn seed [seeder]`: executes database seeders
 - `dstrn seed:make <name>`: creates a new database seeder class
-- `dstrn drop`: drops all tables in the database with confirmation prompt
-- `dstrn advisor`: analyzes database schemas and queries to recommend optimal indexes
+- `dstrn drop`: drops all tables in the database with confirmation prompt (supports --force for non interactive execution)
+- `dstrn advisor`: analyzes database schemas and queries to recommend optimal indexes (supports --apply)
 
 ## code generators
 
