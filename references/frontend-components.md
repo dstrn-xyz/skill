@@ -85,6 +85,7 @@ searchable, extensible select component with automatic floating placement:
   - `allow-search` / `allowSearch`: `boolean` (default `false`)
   - `allow-input` / `allowInput`: `boolean` (default `false`)
   - `horizontal` / `isHorizontal`: `boolean` (default `false`)
+  - `empty-text` / `emptyText`: `string` (default `"no results"`)
   - `name`: `string` (default `""`)
   - `id`: `string` (default `""`)
   - `options`: `array` (default `[]`, array of `{value, text, content}`)
