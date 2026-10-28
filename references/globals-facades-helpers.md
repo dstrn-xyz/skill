@@ -10,7 +10,7 @@ these objects are always available on globalThis:
 - `Socket`: websocket route registration facade (`Socket.on`, `Socket.group`, `Socket.middleware`, `Socket.broadcast`, `Socket.setState`, `Socket.to`, `Socket.toUser`, `Socket.toUserState`, `Socket.toUsers`, `Socket.toUsersState`, `Socket.toSession`, `Socket.toSessionState`, `Socket.guard`, `Socket.toGuardUser`, `Socket.toGuardUserState`, `Socket.toGuardUsers`, `Socket.toGuardUsersState`, `Socket.revokeUser`, `Socket.liveNotify`)
 - `DB`: database query builder and connection facade (`DB.table`, `DB.query`, `DB.insert`, `DB.transaction`)
 - `Auth`: user authentication facade (`Auth.check()`, `Auth.user()`, `Auth.id()`, `Auth.guard('admin')`, `Auth.login(user, data, perm)`, `Auth.logout()`, `Auth.flush()`)
-- `Session`: session storage facade (`Session.get()`, `Session.set()`, `Session.has()`, `Session.flash()`, `Session.forget()`, `Session.permanent()`, `Session.id()`, `Session.regenerate()`)
+- `Session`: session storage facade (`Session.get()`, `Session.set()`, `Session.has()`, `Session.flash()`, `Session.forget()`, `Session.flush()`, `Session.permanent()`, `Session.id()`, `Session.regenerate()`)
 - `Job`: background queue facade (`Job.dispatch('JobName', payload, { timeout, tries, backoff })`)
 - `Log`: application logging facade (`Log.debug`, `Log.info`, `Log.warn`, `Log.error`, `Log.table`)
 - `Config`: configuration facade (`Config.get('app.key', default)`, `Config.has('app.key')`, `Config.register(name, config)`)
@@ -24,6 +24,19 @@ const setting = Config.get('app.env');
 Log.info('user action registered', { id: user?.id });
 Job.dispatch('SendEmailJob', { userId: 1 }, { timeout: 30000, tries: 3 });
 ```
+
+### session and authentication lifecycle distinction
+
+- `Session.flush()`: wipes all stored keys and values from the active session payload without destroying the authenticated user credentials or invalidating active websocket connections
+- `Auth.logout()` or `Auth.flush()`: destroys the authenticated user context, clears authentication cookies and guard sessions, and immediately revokes authorization across active websocket clients
+
+### session drivers and stealth sessions
+
+dframework supports `memory`, `database`, `redis`, `file`, and `stealth` drivers configured in `config/session.js`.
+
+- `stealth`: completely stateless on the server side. the session payload is encrypted with aes 256 gcm via `Hash.encrypt` using `APP_KEY` and transmitted entirely within the client session cookie. zero database lookups, zero server memory consumption, and zero garbage collection sweeps.
+- size constraint: because the entire encrypted payload resides in the cookie, session data must remain small (under the standard 4kb cookie header limit).
+- sliding expiration: expiration timestamp is sealed inside the encrypted payload and automatically refreshed on session save.
 
 ## global response helpers (never import)
 

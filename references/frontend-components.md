@@ -557,3 +557,12 @@ the compiler automatically replaces the core component with the user implementat
 ### dComponent is immutable
 
 `dComponent` is the foundational base class for all custom elements and reactivity. it cannot be overridden or shadowed by user code. the compiler always enforces that the core `dComponent` base class is bundled first so all components inherit properly.
+
+## custom dComponent lifecycle and reconnection behavior
+
+when building custom UI components that extend `dComponent`, understand the lifecycle distinctions:
+
+- `mount()`: called exactly once when the component is first mounted into the DOM (before `_dc_initialized` is set). use this hook for initial template rendering, DOM caching, and one time setup.
+- `connected()`: called whenever the component attaches to the DOM. if a component has already initialized and is reconnected (such as moving within the DOM tree or during client side SPA transitions), `connected()` runs while `mount()` is skipped. use this hook to restore active subscriptions or listeners.
+- `destroy()`: called when the component is removed from the DOM. `dComponent` automatically clears registered intervals, timeouts, animation frames, and DOM listeners, and invokes `destroy()` for custom cleanup.
+- `update()`: schedules an asynchronous reactive rerender when state properties change.

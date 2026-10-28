@@ -293,6 +293,8 @@ if (v.fails()) {
 }
 ```
 
+validation rules for `min:N` and `max:N` evaluate character length on string values by default. when paired with `number` or `integer` rules (such as `integer|min:18`), the validator evaluates numeric magnitude rather than character count. on array values, `min:N` and `max:N` evaluate element count.
+
 ### file validation
 
 pass `req` instead of `req.body` to validate uploaded files:
