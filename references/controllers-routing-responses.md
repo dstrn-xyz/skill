@@ -232,10 +232,13 @@ Route.port(8080, (internal) => {
 // head request routes
 Route.head('/ping', () => status(200));
 
-// basic auth protection (chainable builder, single route modifier, or custom validator)
+// basic auth protection (chainable builder, single route modifier, custom validator, or group callback)
 Route.basicAuth('admin', 'secret').get('/metrics', 'MetricsController@export');
 Route.get('/secret', 'app.SecretController@show').basicAuth('admin', 'secret');
 Route.basicAuth(async (user, pass) => user === 'admin' && pass === 'secret').get('/admin', 'AdminController@index');
+Route.basicAuth(() => {
+  Route.get('/admin/metrics', 'MetricsController@show');
+});
 
 // parameter constraints with regex patterns
 Route.get('/users/:id', 'UserController@show').where('id', '[0-9]+');
