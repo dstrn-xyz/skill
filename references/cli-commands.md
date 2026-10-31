@@ -5,7 +5,7 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 ## project lifecycle
 
 - `dstrn init <name>`: scaffolds a fresh dframework application
-- `dstrn serve`: boots the development server with live reload and watcher
+- `dstrn serve [--host=] [--port=]`: boots the development server with live reload and watcher
 - `dstrn tinker [code]`: interactive repl with all models, facades, and helpers preloaded
 - `dstrn key:generate`: generates and updates the 32 byte APP_KEY encryption key in .env
 - `dstrn run <command>`: runs a user command from console/commands/ (resolves `${name}.js` or `${name}Command.js`, forwards options and arguments)
@@ -56,4 +56,4 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 - `dstrn lint`: checks architecture rules and separation of concerns
 - `dstrn dead`: identifies unused views, dead controllers, and orphaned code
 - `dstrn doctor`: comprehensive health score across security, database, and code quality
-- `dstrn lang:lint`: verifies translation keys and language parity across dictionaries
+- `dstrn lang:lint [--strict]`: verifies translation keys and language parity across dictionaries
