@@ -504,7 +504,7 @@ enhanced text input:
   - `disabled`: `boolean` (default `false`)
   - `readonly`: `boolean` (default `false`)
   - `min`, `max`, `step`: `string` (number controls)
-- programmatic api: `.value`, `.placeholder`, `.icon`, `.disabled`, `.readonly`
+- programmatic api: `.value`, `.placeholder`, `.icon`, `.disabled`, `.readonly`, `.focus()`, `.blur()`
 - events: `change`
 - behavior: supports global keyboard shortcuts (e.g. `cmd+k`) that focus the field automatically, and displays increment/decrement stepper controls when configured with `type="number"`.
 
