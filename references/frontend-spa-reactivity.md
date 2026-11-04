@@ -4,7 +4,9 @@ dframework provides an integrated frontend stack: compiled custom utility CSS (`
 
 ## utility css classes (dstrn.css)
 
-dframework provides its own custom compiled utility classes. do not assume tailwind or bootstrap classes exist.
+dframework provides its own custom compiled utility classes. do not assume tailwind or bootstrap classes exist. the `dstrn.css` and `dstrn.js` bundles are regenerated automatically by the runtime watcher whenever changes in `public/css/components/` or `public/js/components/` are detected.
+
+elements with `btn` and `btn-` classes have inline-flex layout, alignment, padding, and border radius built in. do not add redundant flex, padding, or border radius utility classes to buttons.
 
 ### layout and flex
 

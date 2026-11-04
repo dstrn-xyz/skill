@@ -13,7 +13,7 @@ these objects are always available on globalThis:
 - `Session`: session storage facade (`Session.get()`, `Session.set()`, `Session.has()`, `Session.flash()`, `Session.forget()`, `Session.flush()`, `Session.permanent()`, `Session.id()`, `Session.regenerate()`)
 - `Job`: background queue facade (`Job.dispatch('JobName', payload, { timeout, tries, backoff })`)
 - `Log`: application logging facade (`Log.debug`, `Log.info`, `Log.warn`, `Log.error`, `Log.table`)
-- `Config`: configuration facade (`Config.get('app.key', default)`, `Config.has('app.key')`, `Config.register(name, config)`)
+- `Config`: configuration facade (`Config.get('app.key', default)`, `Config.get('storage.default', 'public')`, `Config.get('socket.maxPayload', 1)`, `Config.has('app.key')`, `Config.register(name, config)`)
 - `app(key)`: application instance helper (`app()`, `app('db')`, `app('logger')`, `app('env')`)
 
 ```javascript
@@ -45,7 +45,7 @@ only call these from within request context (controllers, middlewares, socket ha
 - `render(viewPath, data)`: compiles and sends `.d` view template
 - `json(data)`: sends json response (`application/json; charset=utf-8`)
 - `redirect(url, code = 302, force = false)`: navigates to url (spa aware, blocks cross origin)
-- `back(fallback, code, force)`: redirects to previous url
+- `back(fallback = '/', code = 302, force = false)`: redirects to previous url using session previous url, falling back to same-origin referer or fallback url
 - `abort(code, message)`: halts execution and sends http error (json for ajax, html for browser)
 - `status(code)`: sets status code and returns chainable builder (`status(422).json({ error: 'invalid' })`)
 - `cookie(name, value, options)`: sets response cookie (supports `maxAge` in seconds; booleans like `maxAge: false` are ignored for session cookies)

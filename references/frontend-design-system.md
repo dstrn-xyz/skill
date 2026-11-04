@@ -71,6 +71,24 @@ combine fractional font sizing with uppercase tracking and truncation:
 </div>
 ```
 
+## button styling conventions
+
+the `.btn` class in `dstrn.css` is a complete component style. it internally defines:
+- layout: `display: inline-flex`, `align-items: center`, `justify-content: center`
+- spacing and padding: `gap: var(--space-s)`, `padding: 0 var(--space-l)`, `height: 2.4em`
+- shape: `border-radius: var(--base-radius)`
+
+elements with `btn` and `btn-` classes do not need additional padding, border radius, or flex settings:
+- do not add extra padding classes (`p-1`, `px-1`, `py-05`)
+- do not add border radius utility classes (`bdr`, `bdr-05`, `bdr-08`)
+- do not add flex layout utilities (`flex`, `inline-flex`, `flex-center`, `items-center`)
+
+use built-in variants for modifiers:
+- colors: `.btn-accent`, `.btn-red`, `.btn-orange`, `.btn-yellow`, `.btn-green`, `.btn-blue`, `.btn-purple`, `.btn-pink`, `.btn-white`, `.btn-black`, `.btn-gray`, `.btn-transparent`
+- style variants: `.btn-outline`
+
+there are no button size classes like `.btn-sm`. buttons and components are sized in em units, so apply font size utility classes (`.fs-08`, `.fs-09`, `.fs-115`, `.fs-15`, etc.) to scale buttons and components proportionally.
+
 ## app shell layout pattern
 
 modern dframework applications use a fixed full-viewport height shell with internal scrollable regions:
@@ -150,7 +168,7 @@ for top navigation and responsive headers, pair desktop link containers with `<d
       <span class="bold text-content-l">app name</span>
     </div>
     <div slot="footer">
-      <a d-link href="/login" class="btn btn-sm w-100">sign in</a>
+      <a d-link href="/login" class="btn fs-08 w-100">sign in</a>
     </div>
   </d-hamburger>
 </nav>

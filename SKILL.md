@@ -33,7 +33,7 @@ every agent working on dframework projects must follow these fundamental rules:
 18. never use native browser `alert()` or `confirm()`; use `notify()`, `modal()`, or `d-modal` instead
 19. keep controllers small and focused; delegate heavy background tasks to `Job.dispatch()` and scheduled tasks to `console/Schedule.js`; jobs can broadcast real time websocket events or target specific users via `Socket.broadcast()`, `Socket.toUser()`, and `Socket.setState()`
 20. never write custom scripts to manually compile views or alter view compiler logic; views are compiled 100% automatically by the framework runtime
-21. never edit `dstrn.js` or `dstrn.css` directly; these bundles are regenerated on server start and edits will be wiped. If the bundles need to be regenerated, ask the user to restart their server
+21. never edit `dstrn.js` or `dstrn.css` directly; these bundles are regenerated automatically on server start and whenever changes in `public/css/components/` or `public/js/components/` are detected, and direct edits will be wiped
 22. never search for or execute frontend build, rebuild, or compile commands (e.g. `npm run build` or `dstrn build`); the asset compiler runs automatically when starting `dstrn serve`
 23. never edit framework source code (`dframework/core/` or `node_modules/dframework/`) to fix project related issues; work entirely within user project files, and rely on the SKILL and documentation rather than inspecting internal implementations
 24. never run dframework internal source code tests (`npm test` in `dframework/`) for user projects; internal tests are completely unrelated to user applications
@@ -41,6 +41,7 @@ every agent working on dframework projects must follow these fundamental rules:
 26. all comments must strictly be explaining why rather than what
 27. prioritize clean, expressive code rather than heavily relying on comments
 28. avoid excessive type checks, again clean expressive code does not require type definitions
+29. elements with `btn` and `btn-` classes do not need additional padding, border radius, or flex settings; inline flex alignment, centered content, padding, and border radius are built into `.btn`. there are no button size classes (like `btn-sm`); apply `fs-` font size classes (e.g. `fs-08`, `fs-09`) to scale buttons and components proportionally because all dimensions use em units
 
 ## detailed references
 
@@ -92,3 +93,4 @@ before finalizing code in any dframework application:
 - [ ] verify no emojis, use the framework's <i class="dstrn-*"> icon font instead
 - [ ] verify comments clearly explain why
 - [ ] verify functions adhere to maximum nesting depth of 3 levels
+- [ ] verify elements with btn and btn- classes do not carry redundant padding, border radius, or flex utility classes

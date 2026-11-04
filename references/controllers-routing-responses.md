@@ -66,7 +66,7 @@ async goodHandler(req) {
 - `return render('view.name', data)`: compiles `.d` template, injects data, returns html
 - `return json(data)`: serializes object, sets application/json content type
 - `return redirect(url, code = 302, force = false)`: handles navigation (spa aware)
-- `return back(fallback)`: redirects to previous url based on session referrer
+- `return back(fallback = '/', code = 302, force = false)`: redirects to previous url using session previous url, falling back to same-origin referer or fallback url
 - `return abort(code, message)`: returns structured json error for ajax or error page for browser
 - `return status(code).json(data)`: sets http status and returns json
 - `return status(code).set('Header', 'val').send(content)`: custom headers and raw body
