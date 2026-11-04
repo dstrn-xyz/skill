@@ -9,6 +9,10 @@ jobs live in `jobs/` and execute in dedicated background worker threads.
 ```javascript
 // jobs/SendWelcomeEmailJob.js
 export default class SendWelcomeEmailJob {
+  static timeout = 30000;
+  static tries = 3;
+  static backoff = 1000;
+
   async handle(payload) {
     const user = await User.find(payload.userId);
     if (!user) return;
@@ -29,6 +33,7 @@ use the global `Job` facade from anywhere (controllers, middlewares, socket hand
 Job.dispatch('SendWelcomeEmailJob', { userId: user.id }, { timeout: 30000, tries: 3 });
 ```
 
+- class level configuration: jobs can define static `timeout`, `tries`, and `backoff` directly on the class; options passed to `Job.dispatch()` override class defaults
 - payload must be json serializable (pass record ids instead of large active record model instances)
 - options parameter supports `timeout` (milliseconds, default 60000), `tries` (max retry count, default 1), and `backoff` (exponential backoff base in ms)
 - persistent worker pool: worker threads are only warmed and started if the application contains jobs in `jobs/`, meaning applications with zero jobs pay zero performance or memory overhead
