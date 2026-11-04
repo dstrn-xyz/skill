@@ -48,8 +48,8 @@ only call these from within request context (controllers, middlewares, socket ha
 - `back(fallback = '/', code = 302, force = false)`: redirects to previous url using session previous url, falling back to same-origin referer or fallback url
 - `abort(code, message)`: halts execution and sends http error (json for ajax, html for browser)
 - `status(code)`: sets status code and returns chainable builder (`status(422).json({ error: 'invalid' })`)
-- `cookie(name, value, options)`: sets response cookie (supports `maxAge` in seconds; booleans like `maxAge: false` are ignored for session cookies)
-- `stream(writer)`: streams response chunks with backpressure handling (writer signature: `async (write, close) => void`)
+- `cookie(name, value, options)`: sets response cookie (supports `maxAge` in seconds and `sameSite` as `'lax'`, `'strict'`, `'none'`, or boolean)
+- `stream(writer)`: streams response chunks with backpressure handling (writer signature: `(write, close) => void`, sync or async)
 
 ## global url and routing helpers
 
