@@ -92,8 +92,8 @@ export default function (scheduler) {
 developers cannot define new top level `dstrn` cli commands. instead, command classes live in `console/commands/` and represent scheduler tasks that can be scheduled or run manually:
 
 ```javascript
-// console/commands/PruneExpiredSessions.js
-export default class PruneExpiredSessions {
+// console/commands/PruneExpiredSessionsCommand.js
+export default class PruneExpiredSessionsCommand {
   async handle(args, options) {
     const isDryRun = this.hasOption('dry-run');
     const batch = parseInt(this.option('batch', 500), 10);

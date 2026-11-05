@@ -9,7 +9,7 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 - `dstrn tinker [code]`: interactive repl with all models, facades, and helpers preloaded
 - `dstrn key:generate`: generates and updates the 32 byte APP_KEY encryption key in .env
 - `dstrn run <command>`: runs a user command from console/commands/ (resolves `${name}.js` or `${name}Command.js`, forwards options and arguments)
-- `dstrn dispatch <job> [--payload=json]`: queues a background job from the command line
+- `dstrn dispatch <job> [--payload=json]`: runs a job directly in the current process with an optional json payload
 
 ## database and migrations
 
@@ -27,7 +27,7 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 - `dstrn make:model <name>`: generates a model class in models/
 - `dstrn make:controller <name>`: generates a controller in controllers/
 - `dstrn make:middleware <name>`: generates a middleware class in middlewares/
-- `dstrn make:command <name>`: generates a console command in console/commands/
+- `dstrn make:command <name>`: generates a console command in console/commands/ (appends Command suffix if omitted)
 - `dstrn make:job <name>`: generates an asynchronous job class in jobs/
 - `dstrn make:component <name>`: generates a view component template
 - `dstrn make:plugin <name>`: scaffolds a cross platform native plugin

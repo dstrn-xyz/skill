@@ -27,12 +27,12 @@ Job.dispatch('SendEmailJob', { userId: 1 }, { timeout: 30000, tries: 3 });
 
 ### session and authentication lifecycle distinction
 
-- `Session.flush()`: wipes all stored keys and values from the active session payload without destroying the authenticated user credentials or invalidating active websocket connections
+- `Session.flush()`: destroys the active session and removes all stored data (including authentication credentials)
 - `Auth.logout()` or `Auth.flush()`: destroys the authenticated user context, clears authentication cookies and guard sessions, and immediately revokes authorization across active websocket clients
 
 ### session drivers and stealth sessions
 
-dframework supports `memory`, `database`, `redis`, `file`, and `stealth` drivers configured in `config/session.js`.
+dframework supports `memory`, `database`, and `stealth` drivers configured in `config/session.js`.
 
 - `stealth`: completely stateless on the server side. the session payload is encrypted with aes 256 gcm via `Hash.encrypt` using `APP_KEY` and transmitted entirely within the client session cookie. zero database lookups, zero server memory consumption, and zero garbage collection sweeps.
 - size constraint: because the entire encrypted payload resides in the cookie, session data must remain small (under the standard 4kb cookie header limit).
