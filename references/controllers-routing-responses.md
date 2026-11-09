@@ -37,7 +37,7 @@ export default class UserController {
 
 ## response helpers mandate
 
-in dframework, you must return global response helpers from your controller methods.
+in dframework, you must return global response helpers from your controller methods. never return raw model instances or plain objects directly, as only response helpers manage headers, status codes, and view rendering. controller actions are always executed as asynchronous handlers within request context.
 
 never use express methods on `res`:
 
