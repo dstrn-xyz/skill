@@ -248,6 +248,7 @@ Route.get('/posts/:year/:slug', 'PostController@show').where({
 });
 
 // individual route modifier overrides and compiler hints
+// dynamic view names are discouraged; use .views([]) so compiler detects locale and layout dependencies
 Route.post('/webhooks/stripe', 'WebhookController@handle')
   .csrf(false)
   .shield(false)
