@@ -8,7 +8,7 @@ these objects are always available on globalThis:
 
 - `Route`: route registration facade (`Route.get`, `Route.post`, `Route.put`, `Route.patch`, `Route.delete`, `Route.head`, `Route.group`, `Route.prefix`, `Route.middleware`, `Route.shield`, `Route.csrf`)
 - `Socket`: websocket route registration facade (`Socket.on`, `Socket.group`, `Socket.middleware`, `Socket.broadcast`, `Socket.setState`, `Socket.to`, `Socket.toUser`, `Socket.toUserState`, `Socket.toUsers`, `Socket.toUsersState`, `Socket.toSession`, `Socket.toSessionState`, `Socket.guard`, `Socket.toGuardUser`, `Socket.toGuardUserState`, `Socket.toGuardUsers`, `Socket.toGuardUsersState`, `Socket.revokeUser`, `Socket.liveNotify`)
-- `DB`: database query builder and connection facade (`DB.table`, `DB.query`, `DB.insert`, `DB.transaction`)
+- `DB`: database query builder and connection facade (`DB.table`, `DB.query`, `DB.insert`, `DB.transaction`, `DB.inTransaction`, `DB.transactionDepth`)
 - `Auth`: user authentication facade (`Auth.check()`, `Auth.user()`, `Auth.id()`, `Auth.guard('admin')`, `Auth.login(user, data, perm)`, `Auth.logout()`, `Auth.flush()`)
 - `Session`: session storage facade (`Session.get()`, `Session.set()`, `Session.has()`, `Session.flash()`, `Session.forget()`, `Session.flush()`, `Session.permanent()`, `Session.id()`, `Session.regenerate()`)
 - `Job`: background queue facade (`Job.dispatch('JobName', payload, { timeout, tries, backoff })`)

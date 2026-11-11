@@ -166,6 +166,8 @@ const recentFive = await User.latest(5);
 const paged = await User.where('status', 'active').paginate(20);
 // paged is an iterable Paginator instance with .total, .currentPage, .lastPage, .links(), etc.
 // custom page parameter name: await User.paginate(20, 'user_page')
+// configure url, parameter name, and query strings fluently:
+paged.setPath('/search').setPageName('p').appends({ q: 'query' });
 
 // eager loading (prevents n+1 queries)
 const users = await User.with('profile', 'posts').get();
@@ -446,6 +448,22 @@ const cached = await DB.query('SELECT * FROM settings', [], { cache: true, ttl: 
 // raw sql literals for updates
 import { SqlHelpers } from 'dframework';
 await DB.table('users').where('id', 1).update({ updated_at: SqlHelpers.raw('NOW()') });
+```
+
+## database transactions
+
+wrap database operations in transactions to ensure atomic commits across queries and active record models. transactions support nested savepoints and connection propagation.
+
+```javascript
+await DB.transaction(async (conn) => {
+  await DB.table('users').where({ id: 1 }).update({ balance: 50 });
+  await TransactionLog.create({ user_id: 1, amount: 50 });
+});
+
+// transaction inspection
+if (DB.inTransaction()) {
+  const depth = DB.transactionDepth;
+}
 ```
 
 ## migrations
