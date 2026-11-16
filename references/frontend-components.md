@@ -400,7 +400,7 @@ modal dialog container:
   - `.opened`, `.isOpened`
 - events: `open`, `close`
 - behavior: displays an overlay dialog and prevents page scrolling while visible. when `persistent` is true, clicking the backdrop calls `close()` to hide the modal without removing the element from the DOM. when `persistent` is false (default), clicking the backdrop calls `destroy()` and removes the element.
-- styling boundaries: `<d-modal>` automatically wraps content in `.d-modal-wrapper` (container background, border, radius, shadow, padding) and `.d-modal-content`. avoid adding outer container classes like `bg-container-l bdr` inside the template to prevent duplicate borders and padding. target `d-modal .d-modal-wrapper` in CSS to customize styling.
+- styling boundaries: `<d-modal>` automatically wraps content in `.d-modal-wrapper` (container background, border, radius, shadow) and `.d-modal-content`. avoid adding outer container classes like `bg-container-l bdr` inside the template to prevent duplicate borders. target `d-modal .d-modal-wrapper` in CSS to customize styling.
 
 ### d-morph
 
