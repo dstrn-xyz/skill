@@ -48,7 +48,7 @@ await App.native.audio.play();
 
 plugins live under `native/plugins/<name>/` and support up to four files:
 
-- `index.js` (required): javascript reference implementation and universal web fallback
+- `index.js` (required): javascript reference implementation returning an object of methods (`return { method() { } };`) and universal web fallback
 - `Plugin.swift` (optional): native iOS implementation (`class Plugin { weak var bridge: Bridge?; init(bridge: Bridge?); func handle(method, params, callId) }`)
 - `Plugin.kt` (optional): native Android implementation (`class Plugin(context: Context, bridge: Bridge) { fun handle(method, args, callId) }`)
 - `Plugin.rs` (optional): native Desktop Tauri implementation (`pub fn handle(method: &str, params: &Value) -> (bool, Value, Value)`)

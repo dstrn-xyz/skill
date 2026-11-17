@@ -240,8 +240,9 @@ Route.basicAuth(() => {
   Route.get('/admin/metrics', 'MetricsController@show');
 });
 
-// parameter constraints with regex patterns
+// parameter constraints with regex patterns or numeric exact values
 Route.get('/users/:id', 'UserController@show').where('id', '[0-9]+');
+Route.get('/special/:id', 'UserController@special').where('id', 42);
 Route.get('/posts/:year/:slug', 'PostController@show').where({
   year: '^[0-9]{4}$',
   slug: '^[a-z0-9-]+$'
