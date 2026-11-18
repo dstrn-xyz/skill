@@ -173,7 +173,7 @@ Route.group({ middleware: ['AuthMiddleware@requireAuth'] }, (r) => {
 // inline array syntax (all entries except last are middleware)
 Route.get('/profile', ['AuthMiddleware@requireAuth', 'UserProfileController@show']);
 
-// instantiated middleware objects (like RateLimiter: windowMs, max, message, keyGenerator, trustedProxies, maxEntries, headers)
+// rate limiter instances (RateLimiter: windowMs, max, message, keyGenerator, trustedProxies, maxEntries, headers)
 import { RateLimiter } from 'dframework';
 const limiter = new RateLimiter({ windowMs: 60000, max: 10, maxEntries: 100000 });
 Route.middleware(limiter).post('/login', 'AuthController@login');
@@ -250,12 +250,13 @@ Route.get('/posts/:year/:slug', 'PostController@show').where({
 
 // individual route modifier overrides and compiler hints
 // dynamic view names are discouraged; use .views([]) so compiler detects locale and layout dependencies
+// on mutating routes with .csrf(false) and .shield(false), production compilation skips body parsing unless body access is statically detected; avoid passing req to Model methods, nested destructuring before body/files, or aliasing req before .input()/.all(), or enforce parsing with .profile({ needsBody: true })
 Route.post('/webhooks/stripe', 'WebhookController@handle')
   .csrf(false)
   .shield(false)
   .log(true)
   .views(['webhooks.receipt'])
-  .profile({ needsSession: false });
+  .profile({ needsSession: false, needsBody: true });
 ```
 
 ### route naming and matching

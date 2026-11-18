@@ -39,7 +39,7 @@ Job.dispatch('SendWelcomeEmailJob', { userId: user.id }, { timeout: 30000, tries
 - persistent worker pool: worker threads are only warmed and started if the application contains jobs in `jobs/`, meaning applications with zero jobs pay zero performance or memory overhead
 - persistent workers remain alive across sequential jobs to eliminate thread creation and database connection overhead
 - `Socket.broadcast()` and `Socket.setState()` called inside jobs are automatically relayed to the main process websocket server via internal IPC
-- configure worker pool concurrency in `config/app.js` via `queue.maxWorkers` (default 4)
+- configure worker pool settings in `config/app.js` via `queue.maxWorkers` (default 4), `queue.timeout` (default 60000), `queue.bootstrapTimeout` (default 30000), and `queue.shutdownTimeout` (default 30000)
 
 ### broadcasting from jobs
 
