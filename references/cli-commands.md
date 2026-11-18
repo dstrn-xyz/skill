@@ -16,10 +16,10 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 - `dstrn migrate`: runs all pending database migrations
 - `dstrn migrate:status`: displays batch status of all migrations
 - `dstrn migrate:rollback`: rolls back the latest migration batch
-- `dstrn migrate:make <table>`: creates a timestamped migration file
+- `dstrn migrate:make <name>`: creates a timestamped migration file (infers table name from naming patterns like `create_users_table` or `add_role_to_users_table`)
 - `dstrn seed [seeder]`: executes database seeders
 - `dstrn seed:make <name>`: creates a new database seeder class
-- `dstrn drop`: drops all tables in the database with confirmation prompt (supports --force for non interactive execution)
+- `dstrn drop [--force]`: drops all tables in non production environments with confirmation prompt (`--force` skips tty confirmation; always blocked in production regardless of `--force`)
 - `dstrn advisor`: analyzes database schemas and queries to recommend optimal indexes (supports --apply)
 
 ## code generators
@@ -29,12 +29,12 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 - `dstrn make:middleware <name>`: generates a middleware class in middlewares/
 - `dstrn make:command <name>`: generates a console command in console/commands/ (appends Command suffix if omitted)
 - `dstrn make:job <name>`: generates an asynchronous job class in jobs/
-- `dstrn make:component <name>`: generates a view component template
+- `dstrn make:component <name>`: generates a client web component (`dComponent`) in `public/js/components/`
 - `dstrn make:plugin <name>`: scaffolds a cross platform native plugin
 
 ## system and certificates
 
-- `dstrn logs:clear`: archives or purges application log files
+- `dstrn logs:clear`: compresses matched logs into individual `.gz` files in `archives/` (`--archive`) or purges application log files
 - `dstrn docs:publish`: copies framework documentation into the local project
 - `dstrn deploy`: generates systemd unit and deployment files
 - `dstrn cert`: inspects ssl certificates

@@ -118,6 +118,8 @@ right click contextual menu with automatic boundary collision clamping:
 - attributes/props:
   - `opened`: `boolean` (default `false`)
   - `parent`: `string` selector (defaults to parent element)
+- static methods:
+  - `dContextMenu.closeAll(except)`: closes all open context menus across document
 - programmatic api:
   - `open(e)`: opens menu with optional pointer event coordinates
   - `close(e)`: closes menu
@@ -261,8 +263,8 @@ responsive mobile navigation hamburger trigger and full screen navigation overla
   - `opened`: `boolean` (default `false`)
   - `breakpoint`: `string` (default `"md"`, tokens: `sm`, `md`, `lg`, `xl`, `xxl`, `ultra` or arbitrary query like `"(max-width: 48em)"`)
   - `target`: `string` (selector of desktop container to clone links from and automatically toggle visibility)
-  - `animation`: `string` (`slide-down`, `fade`, `slide-right`, `slide-left`)
-  - `direction`: `string` (`top`, `right`, `left`, `bottom`)
+  - `animation`: `string` (`slide-down`, `fade`, `slide-right`, `slide-left`, default `"slide-down"`)
+  - `direction`: `string` (`top`, `right`, `left`, `bottom`, default `"top"`)
   - `size`: `string` (default `"1.5em"`)
   - `color`: `string` (default `"currentColor"`)
   - `activecolor` / `activeColor`: `string` (default `"var(--accent)"`)

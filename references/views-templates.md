@@ -195,7 +195,7 @@ heavy lifting (data loading, domain calculations, DB queries) belongs in control
 
 ## localization and furigana
 
-- `@t('file.key')`: sync translation in views
+- `@t('file.key')`: async translation in views (compiles to `await t()` and marks the compiled view async)
 - `@t('file.key', { name: user.name })`: with parameter interpolation
 - `@ruby('漢字', 'かんじ')`: renders `<ruby>漢字<rt>かんじ</rt></ruby>`
 - `@ruby('日本[にほん]語[ご]')`: parses inline bracket annotations into ruby tags
