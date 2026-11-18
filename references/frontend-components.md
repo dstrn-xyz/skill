@@ -527,10 +527,10 @@ segmented control with magnetic hover and spring transitions:
   - `id`: `string` (default `""`)
   - `color`: `string` (default `"var(--container-l)"`)
   - `activecolor` / `activeColor`: `string` (default `"var(--accent)"`)
-  - `textcolor` / `textColor`: `string` (default `"var(--content-l)"`)
-  - `textactivecolor` / `textActiveColor`: `string` (default `""`)
+  - `textcolor` / `textColor`: `string` (default `""`, auto contrast against background)
+  - `textactivecolor` / `textActiveColor`: `string` (default `""`, auto contrast against active background)
   - `bgcolor` / `bgColor`: `string` (default `"var(--container-l)"`)
-  - `hovercolor` / `hoverColor`: `string` (default `"rgba(255, 255, 255, 0.05)"`)
+  - `hovercolor` / `hoverColor`: `string` (default `""`, theme adaptive subtle hover)
 - programmatic api:
   - `.selected`: getter returns active element, setter accepts index (number/string) or button element
   - `.value`: selected index number
