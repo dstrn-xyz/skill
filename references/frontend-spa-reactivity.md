@@ -164,9 +164,16 @@ dComponent.define(UserBadge);
 | `connected()` | on every connection | called whenever element is attached to document |
 | `render()` | on state/prop change | performs surgical dom updates |
 | `onPropChanged(name, old, new)` | on prop mutation | reacts to specific property changes |
+| `syncForm()` | form/manual | synchronizes ElementInternals form value; can be overridden for custom form submission rules |
 | `onscreen()` | on viewport entry | called when component enters viewport via intersection observer |
 | `offscreen()` | on viewport exit | called when component leaves viewport via intersection observer |
 | `destroy()` | on disconnection | teardown hook called when element is removed from dom |
+
+### helper methods and reflection
+
+- `this.reflectAttribute(name, value)`: immediately reflects a property or attribute value to the host DOM element safely without triggering recursive `attributeChangedCallback` execution.
+- `this.isProgrammaticUpdate`: read-only boolean getter indicating if property mutations are currently occurring via property setters and `onPropChanged()`.
+- `this.syncForm()`: triggers form value synchronization with parent form `ElementInternals`.
 
 ### overriding built in components
 
