@@ -25,6 +25,7 @@ when building interfaces, always use dframework components:
 - use `d-link` or `<a d-link>` for client side navigation without full page reloads
 - use `d-form` for ajax form submission, automatic csrf injection, and inline error handling
 - use `d-context-menu` for right click contextual actions with boundary clamping
+- built in components support native client side localization out of the box with english and japanese dictionaries; use `this.t()` in custom dcomponents (see the localization reference for details)
 
 ## component catalog
 

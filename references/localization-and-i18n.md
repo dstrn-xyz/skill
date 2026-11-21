@@ -175,3 +175,53 @@ the linter performs comprehensive checks:
 - translation json files are cached in memory after first load
 - in local development (`app.env = 'local'`), file watchers automatically invalidate cache on file edit without server restart
 - in production, files are cached in memory for process lifetime with zero filesystem overhead
+
+## client side dcomponent localization
+
+all built in and custom dcomponents support unified client localization through `dComponent`. each component encapsulates its own default translations cleanly using a static getter (following single responsibility principle):
+
+```javascript
+class MyUploader extends dComponent {
+  static get tag() { return 'my-uploader'; }
+
+  static get translations() {
+    return {
+      en: {
+        placeholder: 'drop files here',
+        selected: ':count files selected'
+      },
+      ja: {
+        placeholder: 'ファイルをここにドロップ',
+        selected: ':count個のファイルが選択されました'
+      }
+    };
+  }
+
+  mount() {
+    const text = this.t('placeholder', 'drop files here');
+    const label = this.t('selected', { count: 2 }, ':count selected');
+  }
+}
+```
+
+### scoped key resolution
+- `this.t('key')` checks:
+  1. global user overrides registered via `dComponent.setTranslations(locale, dict)`
+  2. component class translations (`static get translations`)
+  3. registered component dictionaries for tag name (`<tag>.<key>`)
+  4. fallback argument or raw key string
+- parameter interpolation uses `:param` tokens.
+
+### hierarchical locale detection
+1. explicit prop or attribute on element (`locale="ja"`)
+2. nearest ancestor with `lang` or `locale` attribute (`<div lang="ja">`)
+3. global client locale set via `dComponent.setLocale('ja')`
+4. root document element attribute (`document.documentElement.lang`)
+5. navigator language in browser
+6. default fallback (`en`)
+
+### runtime switching, static helpers, and custom dictionaries
+- `dComponent.setLocale(locale)` switches active locale and reactively re renders all mounted dcomponents on the page.
+- `dComponent.getLocale()` returns the active client locale string.
+- `dComponent.setTranslations(locale, dict)` registers new language dictionaries or overrides existing component translations globally.
+- `dComponent.t(key, params, fallback, locale)` translates strings statically outside component instances.
