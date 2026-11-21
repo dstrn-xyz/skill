@@ -18,11 +18,11 @@ elements with `btn` and `btn-` classes have inline-flex layout, alignment, paddi
 
 ### spacing and sizing
 
-- padding: `.p-0`, `.p-05`, `.p-1`, `.p-15`, `.p-2`, `.p-3`, `.px-1`, `.py-2`, `.pt-1`, `.pb-1`
-- margin: `.m-0`, `.m-auto`, `.mx-auto`, `.my-1`, `.mt-2`, `.mb-2`, `.ml-auto`
+- padding: `.p-0`, `.p-05`, `.p-1`, `.p-15`, `.p-2`, `.p-3`, `.px-1`, `.py-2`, `.pt-1`, `.pb-1` (extended scale `0`, `01` through `09`, `1`, `125`, `15`, `175`, `2`, `25`, `3`..`10`)
+- margin: `.m-0`, `.m-auto`, `.mx-auto`, `.my-1`, `.mt-2`, `.mb-2`, `.ml-auto` (same scale + auto)
 - gap: `.g-05`, `.g-1`, `.g-15`, `.g-2`, `.g-3`, `.gx-1` (column gap), `.gy-1` (row gap)
-- width: `.w-100` (100%), `.w-50`, `.w-auto`, `.w-100vw`, `.min-w-0`, `.max-w-100`
-- height: `.h-100` (100%), `.h-100svh`, `.min-h-100svh`, `.h-auto`
+- width: `.w-100` (100%), `.w-50`, `.w-auto`, `.w-100vw`, `.w-1em`, `.min-w-0`, `.max-w-100` (percent, svh, vw, em, keywords)
+- height: `.h-100` (100%), `.h-100svh`, `.h-2em`, `.min-h-100svh`, `.h-auto` (percent, svh, vw, em, keywords)
 
 ### typography and appearance
 
@@ -31,6 +31,7 @@ elements with `btn` and `btn-` classes have inline-flex layout, alignment, paddi
 - alignment: `.text-left`, `.text-center`, `.text-right`
 - text wrap: `.truncate`, `.overflow-ellipsis`, `.break-words`
 - radius: `.bdr-05`, `.bdr-1`, `.bdr-2`, `.bdr-circle`
+- opacity: `.opacity-05`, `.opacity-10`, `.opacity-50`, `.opacity-100` (5% steps matching PERCENT_STEPS from 0 to 100)
 - border: `.border-s`, `.border-m`, `.border-bottom-s`, `.border-top-s`
 - shadow: `.shadow-s`, `.shadow-m`, `.shadow-l`
 - cursor and effects: `.pointer`, `.hover:bg-accent`, `.hover:text-accent`, `.shadow-hover-s`
