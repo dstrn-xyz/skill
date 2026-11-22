@@ -4,7 +4,7 @@ controllers and route definitions in dframework follow laravel style conventions
 
 ## controller design
 
-controllers live in `controllers/` and can be organized in subdirectories. each file exports a default class with async methods.
+controllers live in `controllers/` and can be organized in subdirectories. each file exports a default class with action methods. mark methods async only when using await or performing asynchronous operations to avoid unnecessary promise overhead.
 
 ```javascript
 // controllers/app/UserController.js
@@ -37,20 +37,20 @@ export default class UserController {
 
 ## response helpers mandate
 
-in dframework, you must return global response helpers from your controller methods. never return raw model instances or plain objects directly, as only response helpers manage headers, status codes, and view rendering. controller actions are always executed as asynchronous handlers within request context.
+in dframework, you must return global response helpers from your controller methods. never return raw model instances or plain objects directly, as only response helpers manage headers, status codes, and view rendering. controller actions return response helpers directly within request context.
 
 never use express methods on `res`:
 
 ```javascript
 // forbidden (express style)
-async badHandler(req, res) {
+badHandler(req, res) {
   res.status(200).json({ ok: true });
   res.send('hello');
   res.redirect('/home');
 }
 
 // required (dframework style)
-async goodHandler(req) {
+goodHandler(req) {
   return json({ ok: true });
   return render('home');
   return redirect('/home');
@@ -143,7 +143,7 @@ export default class AuthMiddleware {
     return next({ devices });
   }
 
-  async requireGuest(req, next) {
+  requireGuest(req, next) {
     if (Auth.check()) {
       return redirect('/dashboard', true);
     }
@@ -255,6 +255,7 @@ Route.post('/webhooks/stripe', 'WebhookController@handle')
   .csrf(false)
   .shield(false)
   .log(true)
+  .track(true)
   .views(['webhooks.receipt'])
   .profile({ needsSession: false, needsBody: true });
 ```
@@ -273,6 +274,10 @@ use `req.input()` or `req.all()` to access parameters, body data, and query stri
 // single input with optional fallback
 const id = req.input('id');
 const search = req.input('q', '');
+
+// correlation id and request snapshot
+const trackingId = req.trackingId;
+const snapshot = req.capture();
 
 // all merged inputs
 const allInputs = req.all(); // or req.input()

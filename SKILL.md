@@ -58,6 +58,7 @@ load and review the relevant reference guide for deep specifications:
 - [frontend, dspa, and reactivity](./references/frontend-spa-reactivity.md): `dstrn.css` utility classes, dSPA router, `d-wire`, `d-live`, and `dComponent` custom elements
 - [jobs, scheduler, and websockets](./references/jobs-scheduler-websockets.md): worker thread jobs, task scheduler commands, frequencies, and websocket routes
 - [native bridge and plugins](./references/native-plugins-bridge.md): `App.native` APIs, zero config 4-file plugins, and platform simulation tools
+- [testing and quality assurance](./references/testing.md): test runner (dstrn test), test scaffolding (dstrn make:test), in process http client (testApp), browser simulation (browse), and database assertions
 - [cli commands and tools](./references/cli-commands.md): built in commands for lifecycle, migrations, database, generators, system, and native platforms
 - [architecture and anti patterns](./references/architecture-and-anti-patterns.md): project directory layout, architectural boundaries, and common mistakes table
 
@@ -93,4 +94,5 @@ before finalizing code in any dframework application:
 - [ ] verify no emojis, use the framework's <i class="dstrn-*"> icon font instead
 - [ ] verify comments clearly explain why
 - [ ] verify functions adhere to maximum nesting depth of 3 levels
+- [ ] verify controller and middleware methods are marked async only when using await or performing asynchronous operations
 - [ ] verify elements with btn and btn- classes do not carry redundant padding, border radius, or flex utility classes

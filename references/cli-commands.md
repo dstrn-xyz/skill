@@ -6,6 +6,7 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 
 - `dstrn init <name>`: scaffolds a fresh dframework application
 - `dstrn serve [--host=] [--port=]`: boots the development server with live reload and watcher
+- `dstrn test [target] [--watch] [--only]`: runs application tests using node native test runner (sets APP_ENV=testing)
 - `dstrn tinker [code]`: interactive repl with all models, facades, and helpers preloaded
 - `dstrn key:generate`: generates and updates the 32 byte APP_KEY encryption key in .env
 - `dstrn run <command>`: runs a user command from console/commands/ (resolves `${name}.js` or `${name}Command.js`, forwards options and arguments)
@@ -31,6 +32,7 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 - `dstrn make:job <name>`: generates an asynchronous job class in jobs/
 - `dstrn make:component <name>`: generates a client web component (`dComponent`) in `public/js/components/`
 - `dstrn make:plugin <name>`: scaffolds a cross platform native plugin
+- `dstrn make:test <name> [--feature|--browser|--unit]`: generates a test file in tests/feature/, tests/browser/, or tests/unit/
 
 ## system and certificates
 

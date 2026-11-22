@@ -69,10 +69,9 @@ const defaultLocale = Locale.getDefault(); // 'en'
 import { Locale } from 'dframework';
 
 export default class LocaleController {
-  async switch(req) {
+  switch(req) {
     const { lang } = req.params;
     
-    // validate against supported locales
     if (!['en', 'ja'].includes(lang)) {
       return abort(400, 'unsupported locale');
     }
