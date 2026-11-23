@@ -35,7 +35,9 @@ Job.dispatch('SendWelcomeEmailJob', { userId: user.id }, { timeout: 30000, tries
 
 - class level configuration: jobs can define static `timeout`, `tries`, and `backoff` directly on the class; options passed to `Job.dispatch()` override class defaults
 - payload must be json serializable (pass record ids instead of large active record model instances)
-- options parameter supports `timeout` (milliseconds, default 60000), `tries` (max retry count, default 1), and `backoff` (exponential backoff base in ms)
+- options parameter supports `timeout` (milliseconds, default 60000), `tries` (max retry count, default 1), `backoff` (exponential backoff base in ms), `trackingId` (correlation uuid), and `log` (boolean to force production lifecycle logging)
+- request correlation: jobs dispatched from tracked requests (`.track()` or global tracking) automatically inherit `trackingId`, exposed as `this.trackingId` and `this.requestId` on the job instance; all logs emitted via `Log.info()` or `Log.error()` inside the job handler are automatically tagged with `[<trackingId>]`
+- route logging matrix: routes marked with `.log()` promote job dispatch and completion logs to `info` level; routes marked with both `.track()` and `.log()` output dispatch and completion logs at `info` level with the `[<trackingId>]` correlation tag
 - persistent worker pool: worker threads are only warmed and started if the application contains jobs in `jobs/`, meaning applications with zero jobs pay zero performance or memory overhead
 - persistent workers remain alive across sequential jobs to eliminate thread creation and database connection overhead
 - `Socket.broadcast()` and `Socket.setState()` called inside jobs are automatically relayed to the main process websocket server via internal IPC
