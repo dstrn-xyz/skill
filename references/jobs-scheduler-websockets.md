@@ -120,7 +120,7 @@ Socket.on('ping', () => json({ pong: true }));
 
 // group with authentication middleware
 Socket.group({ middleware: ['AuthMiddleware@requireAuth'] }, (auth) => {
-  auth.on('chat:message', async (req, res, ws) => {
+  auth.on('chat:message', async (req) => {
     const message = await Message.create({
       user_id: Auth.user().id,
       content: req.body.content
@@ -131,7 +131,7 @@ Socket.group({ middleware: ['AuthMiddleware@requireAuth'] }, (auth) => {
       id: message.id,
       user: Auth.user().name,
       content: message.content
-    }, ws);
+    }, req.ws);
 
     return json({ success: true });
   }).targets(['#chat-messages']);

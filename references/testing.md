@@ -2,7 +2,7 @@
 
 dframework provides a built in zero dependency testing framework built directly on node's native test runner (node:test). applications perform fast in process http requests without socket allocation overhead, assert database state, and simulate browser interactions with full form and navigation fidelity in continuous integration pipelines.
 
-the `dframework/testing` module re-exports all test runner and assertion primitives (test, describe, it, before, after, beforeEach, afterEach, only, skip, todo, and strict assert). test files import everything directly from `dframework/testing` without requiring any direct node:test or node:assert imports.
+the `dframework/testing` module re-exports all test runner and assertion primitives (`test`, `describe`, `it`, `before`, `after`, `beforeEach`, `afterEach`, `only`, `skip`, `todo`, and strict `assert`). in addition, it provides the unified `Tester` facade (`Tester.get`, `Tester.post`, `Tester.put`, `Tester.patch`, `Tester.delete`, `Tester.route`, `Tester.actingAs`, `Tester.fake`, `Tester.assertDispatched`, `Tester.assertDatabaseHas`) with zero wrapper boilerplate. like other framework facades, `Tester` is also available globally on globalThis in the test environment. test files import everything directly from `dframework/testing` without requiring any direct node:test or node:assert imports.
 
 ## cli test runner
 
@@ -48,54 +48,48 @@ dstrn make:test Auth/RegistrationTest
 
 ## in process http integration tests
 
-the `testApp()` client dispatches synthetic requests directly through the application pipeline with zero socket binding overhead.
+the `Tester` facade dispatches synthetic requests directly through the application pipeline with zero socket binding overhead.
 
 ### request methods and session continuity
 
-sequential requests within the same `testApp()` client share cookie jars and session state:
+sequential requests share cookie jars and session state through the `Tester` facade:
 
 ```javascript
-import { describe, it, assert, testApp } from 'dframework/testing';
+import { test, Tester } from 'dframework/testing';
 
-describe('user profile feature', () => {
-  it('updates profile and preserves session cookies', async () => {
-    const app = await testApp();
-
-    const loginRes = await app.post('/login', {
-      email: 'alex@example.com',
-      password: 'secret'
-    });
-    loginRes.assertRedirect('/dashboard');
-
-    const profileRes = await app.get('/profile');
-    profileRes.assertOk();
-    profileRes.assertSee('alex@example.com');
+test('updates profile and preserves session cookies', async () => {
+  const loginRes = await Tester.post('/login', {
+    email: 'alex@example.com',
+    password: 'secret'
   });
+  loginRes.assertRedirect('/dashboard');
+
+  const profileRes = await Tester.get('/profile');
+  profileRes.assertOk();
+  profileRes.assertSee('alex@example.com');
 });
 ```
 
-supported methods include `app.get()`, `app.post()`, `app.put()`, `app.patch()`, `app.delete()`, and `app.head()`.
+supported methods include `Tester.get()`, `Tester.post()`, `Tester.put()`, `Tester.patch()`, `Tester.delete()`, `Tester.head()`, and `Tester.options()`.
 
-client configuration methods:
-- `app.withHeaders(headers)`: attaches custom headers to requests
-- `app.withCookies(cookies)`: attaches custom cookies to client jar
-- `app.withoutCsrf()`: disables automated csrf token generation on mutating requests
+configuration methods:
+- `Tester.actingAs(user)`: authenticates user for subsequent requests
+- `Tester.withHeaders(headers)`: attaches custom headers to requests
+- `Tester.withCookies(cookies)`: attaches custom cookies to client jar
+- `Tester.withoutCsrf()`: disables automated csrf token generation on mutating requests
 
 ### user authentication
 
 use `actingAs` to authenticate a user before executing requests:
 
 ```javascript
-import { describe, it, testApp } from 'dframework/testing';
+import { test, Tester } from 'dframework/testing';
 
-describe('dashboard access', () => {
-  it('allows access to authenticated user', async () => {
-    const app = await testApp();
-    app.actingAs({ id: 42, role: 'admin' });
+test('allows access to authenticated user', async () => {
+  Tester.actingAs({ id: 42, role: 'admin' });
 
-    const res = await app.get('/admin/dashboard');
-    res.assertOk();
-  });
+  const res = await Tester.get('/admin/dashboard');
+  res.assertOk();
 });
 ```
 
@@ -122,29 +116,87 @@ response accessors:
 - `res.text()`: raw body string
 - `res.headers`: response headers object
 
-## database assertions
+## service fakes
 
-test app instances provide assertion helpers for database verification:
+dframework provides test doubles and spies for background jobs, websocket events, and queues via `fake({ jobs: true, socket: true })`, `fakeJobs()` / `fakeSocket()`, or passing service names like `fake('jobs')` or `fake(['jobs', 'socket'])`. assertions are verified using top-level helpers or client methods, never called on global facades.
+
+### faking background jobs
+
+calling `Tester.fake({ jobs: true })` (or `Tester.fakeJobs()`) intercepts dispatches and records jobs in memory:
 
 ```javascript
-import { describe, it, testApp } from 'dframework/testing';
+import { test, Tester } from 'dframework/testing';
 
-describe('registration flow', () => {
-  it('creates user in database', async () => {
-    const app = await testApp();
-    await app.migrate();
-    await app.rollback();
-    await app.migrate();
+test('dispatches confirmation email on checkout', async () => {
+  Tester.fake({ jobs: true });
 
-    await app.post('/register', {
-      name: 'Sam',
-      email: 'sam@example.com'
-    });
+  const res = await Tester.post('/checkout', { cartId: 10 });
+  res.assertOk();
 
-    await app.assertDatabaseHas('users', { email: 'sam@example.com' });
-    await app.assertDatabaseMissing('users', { email: 'ghost@example.com' });
-    await app.assertDatabaseCount('users', 1);
+  Tester.assertDispatched('SendOrderConfirmationJob');
+  Tester.assertDispatched('SendOrderConfirmationJob', (payload) => payload.cartId === 10);
+  Tester.assertDispatchedTimes('SendOrderConfirmationJob', 1);
+  Tester.assertNotDispatched('CancelOrderJob');
+});
+```
+
+job assertions:
+- `Tester.assertDispatched(job, callback)`: assert job was dispatched, optionally matching predicate
+- `Tester.assertNotDispatched(job, callback)`: assert job was not dispatched
+- `Tester.assertDispatchedTimes(job, count)`: assert exact dispatch count
+- `Tester.assertNothingDispatched()`: assert no jobs were dispatched
+- `Tester.dispatched(job, callback)`: retrieve dispatched jobs matching filter
+
+### faking websocket events
+
+calling `Tester.fake({ socket: true })` (or `Tester.fakeSocket()`) intercepts websocket events without requiring a live socket server:
+
+```javascript
+import { test, Tester } from 'dframework/testing';
+
+test('broadcasts message and notifies recipient', async () => {
+  Tester.fake({ socket: true });
+
+  await Tester.post('/messages', { toUser: 42, text: 'hello' });
+
+  Tester.assertBroadcast('message.sent');
+  Tester.assertSentToUser(42, 'notification.new');
+  Tester.assertNotSentToUser(99, 'notification.new');
+});
+```
+
+socket assertions:
+- `Tester.assertBroadcast(event, callback)`: assert event was broadcast to all clients
+- `Tester.assertNotBroadcast(event, callback)`: assert event was not broadcast
+- `Tester.assertSentToUser(userOrId, event, callback)`: assert event was sent to specific user id
+- `Tester.assertNotSentToUser(userOrId, event, callback)`: assert event was not sent to user
+- `Tester.assertSentToSession(sessionId, event, callback)`: assert event was sent to specific session
+- `Tester.assertSent(event, callback)`: assert event was sent across any channel
+- `Tester.assertNotSent(event, callback)`: assert event was not sent across any channel
+- `Tester.assertSentTimes(event, count)`: assert event was sent an exact number of times
+- `Tester.assertNothingSent()`: assert no socket events were emitted
+- `Tester.assertRevoked(userOrId, guardName)`: assert user websocket session was revoked
+- `Tester.sent(event, callback)`: retrieve sent socket events matching filter
+- `Tester.broadcasted(event, callback)`: retrieve broadcasted socket events matching filter
+
+## database assertions and transactions
+
+wrap tests in automatic database rollbacks using `Tester.useDatabaseTransactions()` (or disable with `Tester.withoutDatabaseTransactions()`) or per callback with `Tester.useTransaction()`. tests execute inside an isolated transaction that rolls back upon test completion:
+
+```javascript
+import { test, Tester } from 'dframework/testing';
+
+Tester.useDatabaseTransactions();
+
+test('creates user in database', async () => {
+  await Tester.post('/register', {
+    name: 'sam',
+    email: 'sam@example.com'
   });
+
+  await Tester.assertDatabaseHas('users', { email: 'sam@example.com' });
+  await Tester.assertDatabaseMissing('users', { email: 'ghost@example.com' });
+  await Tester.assertDatabaseCount('users', 1);
 });
 ```
 
@@ -207,4 +259,4 @@ Route.track(() => {
 });
 ```
 
-when active, correlation tracking id is available on `req.trackingId`, forwarded via `X-Request-Id` response header, prepended to file logs (`[<requestId>]`), and attached to 500 error views and json error responses.
+when active, correlation tracking id is available on `req.trackingId`, forwarded via `X-Request-Id` response header, prepended to file logs (`[<requestId>]`), and attached to 500 error views and json error responses. request state can be recorded at any point using `Tracker.capture()`, and exported asynchronously using registered sinks configured via `Tracker.sink()`.

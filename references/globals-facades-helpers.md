@@ -14,6 +14,7 @@ these objects are always available on globalThis:
 - `Job`: background queue facade (`Job.dispatch('JobName', payload, { timeout, tries, backoff, trackingId, log })`)
 - `Log`: application logging facade (`Log.debug`, `Log.info`, `Log.warn`, `Log.error`, `Log.table`)
 - `Config`: configuration facade (`Config.get('app.key', default)`, `Config.get('storage.default', 'public')`, `Config.get('socket.maxPayload', 1)`, `Config.has('app.key')`, `Config.register(name, config)`)
+- `Tracker`: request and telemetry tracking facade (`Tracker.sink`, `Tracker.capture(err, status)`, `Tracker.hasSinks`, `Tracker.drain`, `Tracker.export`)
 - `app(key)`: application instance helper (`app()`, `app('db')`, `app('logger')`, `app('env')`)
 
 ```javascript
@@ -117,5 +118,5 @@ import { Inflector } from 'dframework';      // for pluralize, snakeCase, pascal
 import { Env } from 'dframework';            // for config/*.js reading
 import { SqlHelpers } from 'dframework';     // for raw SQL literals like NOW()
 import { RequestContext } from 'dframework'; // for accessing req outside controllers
-import { test, describe, it, assert, testApp, browse } from 'dframework/testing'; // for application testing in tests/
+import { test, describe, it, assert, Tester, browse } from 'dframework/testing'; // for application testing in tests/ (Tester is also available on globalThis)
 ```

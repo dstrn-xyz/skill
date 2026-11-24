@@ -6,7 +6,7 @@ dframework enforces clear architectural boundaries and predictable conventions.
 
 the root folder structure is fixed and discovered automatically:
 
-- `config/`: configuration modules (`app.js`, `auth.js`, `database.js`, `session.js`, `socket.js`, `storage.js`, `native.js`)
+- `config/`: configuration modules (`app.js`, `auth.js`, `database.js`, `session.js`, `socket.js`, `storage.js`, `native.js`, `tracking.js`)
 - `console/`: background scheduler (`Schedule.js`) and command classes (`commands/`)
 - `controllers/`: request handlers (subdirectories map via dot notation)
 - `database/`: migrations (`database/migrations/`) and seeders (`database/seeders/`)

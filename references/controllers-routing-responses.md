@@ -277,7 +277,7 @@ const search = req.input('q', '');
 
 // correlation id and request snapshot
 const trackingId = req.trackingId;
-const snapshot = req.capture();
+const snapshot = Tracker.capture();
 
 // all merged inputs
 const allInputs = req.all(); // or req.input()
