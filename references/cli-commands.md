@@ -6,7 +6,7 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 
 - `dstrn init <name>`: scaffolds a fresh dframework application
 - `dstrn serve [--host=] [--port=]`: boots the development server with live reload and watcher
-- `dstrn test [target] [--watch] [--only]`: runs application tests using node native test runner (sets APP_ENV=testing)
+- `dstrn test [target] [--watch] [--only] [--raw] [--reporter=]`: runs application tests using node native test runner (sets APP_ENV=testing)
 - `dstrn tinker [code]`: interactive repl with all models, facades, and helpers preloaded
 - `dstrn key:generate`: generates and updates the 32 byte APP_KEY encryption key in .env
 - `dstrn run <command>`: runs a user command from console/commands/ (resolves `${name}.js` or `${name}Command.js`, forwards options and arguments)
@@ -39,7 +39,7 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 - `dstrn logs:clear`: compresses matched logs into individual `.gz` files in `archives/` (`--archive`) or purges application log files
 - `dstrn docs:publish`: copies framework documentation into the local project
 - `dstrn deploy`: generates systemd unit and deployment files
-- `dstrn cert`: inspects ssl certificates
+- `dstrn cert <obtain|renew|status>`: manages tls certificates (requires an action)
 - `dstrn cert:obtain`: provisions automated ssl certificates
 - `dstrn cert:renew`: renews installed ssl certificates
 - `dstrn cert:status`: checks validity and expiration of domain certificates
@@ -49,7 +49,7 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 - `dstrn simulate [--ios|--android|--desktop]`: runs the project in native mobile or desktop simulator
 - `dstrn build [--ios|--android|--desktop]`: compiles production binaries for target platforms
 - `dstrn native:status`: inspects native project configuration and platform status
-- `dstrn native:doctor`: verifies native toolchains and sdk installations
+- `dstrn native:doctor [--desktop|--android|--ios]`: verifies native toolchains and sdk installations (exits non zero if required or targeted platform checks fail)
 - `dstrn native:clean`: cleans native build caches and derived data
 
 ## architecture and quality
@@ -57,5 +57,5 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 - `dstrn graph`: analyzes application dependency graph and routes
 - `dstrn lint`: checks architecture rules and separation of concerns
 - `dstrn dead`: identifies unused views, dead controllers, and orphaned code
-- `dstrn doctor`: comprehensive health score across security, database, and code quality
+- `dstrn doctor`: project quality score across architecture violations, unreachable dead code, and graph complexity
 - `dstrn lang:lint [--strict]`: verifies translation keys and language parity across dictionaries
