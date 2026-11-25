@@ -21,7 +21,7 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 - `dstrn seed [seeder]`: executes database seeders
 - `dstrn seed:make <name>`: creates a new database seeder class
 - `dstrn drop [--force]`: drops all tables in non production environments with confirmation prompt (`--force` skips tty confirmation; always blocked in production regardless of `--force`)
-- `dstrn advisor`: analyzes database schemas and queries to recommend optimal indexes (supports --apply)
+- `dstrn advisor`: analyzes database schemas and queries to recommend optimal indexes (supports --apply and --force)
 
 ## code generators
 
@@ -39,7 +39,7 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 - `dstrn logs:clear`: compresses matched logs into individual `.gz` files in `archives/` (`--archive`) or purges application log files
 - `dstrn docs:publish`: copies framework documentation into the local project
 - `dstrn deploy`: generates systemd unit and deployment files
-- `dstrn cert <obtain|renew|status>`: manages tls certificates (requires an action)
+- `dstrn cert <obtain|renew|status>`: manages tls certificates (requires an action; supports optional --dir)
 - `dstrn cert:obtain`: provisions automated ssl certificates
 - `dstrn cert:renew`: renews installed ssl certificates
 - `dstrn cert:status`: checks validity and expiration of domain certificates
