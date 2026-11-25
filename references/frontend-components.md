@@ -813,7 +813,7 @@ top layer floating popover container (`popover="manual"`) with batched `translat
 
 ### d-progress
 
-gpu composited progress bar indicator with optional label, percentage readout, and indeterminate mode:
+progress bar indicator with optional label, percentage readout, and indeterminate mode:
 
 ```html
 <d-progress value="56" label="upload progress" show-value></d-progress>
@@ -890,7 +890,7 @@ interactive multi step questionnaire composing progress, radio buttons, checkbox
 
 ### d-sidebar
 
-application shell sidebar designed for zero layout thrashing with offcanvas sliding, icon collapse mode, and responsive mobile drawers:
+application shell sidebar designed with offcanvas sliding, icon collapse mode, and responsive mobile drawers:
 
 ```html
 <d-sidebar id="app-sidebar" collapsible="icon" variant="sidebar" persist="app_sidebar">
@@ -931,10 +931,11 @@ application shell sidebar designed for zero layout thrashing with offcanvas slid
   - `breakpoint`: `string` (default `"md"`, switches to mobile overlay)
   - `shortcut`: `string` (default `"cmd+b"`)
   - `persist`: `string` (default `""`, localstorage key)
+  - `toggle-button`: `boolean` (default `true`, persistent edge toggle button)
 - programmatic api:
   - `.open()`, `.close()`, `.toggle()`, `.isOpen`, `.isMobile`
 - events: `open` (`{ mobile }`), `close` (`{ mobile }`)
-- behavior: uses static layout spacer with fixed css variable widths and gpu transforms to eliminate reflows; in icon mode hides labels and attaches tooltips; clicking rail or external `[d-sidebar-trigger]` toggles sidebar; converts to offcanvas drawer below breakpoint.
+- behavior: features a persistent overflowing top edge toggle button (`dstrn-left-line`/`dstrn-right-line`); in icon mode hides labels and attaches tooltips; clicking rail or external `[d-sidebar-trigger]` toggles sidebar; converts to offcanvas drawer below breakpoint.
 
 ### d-skeleton
 
