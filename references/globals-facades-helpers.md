@@ -14,6 +14,7 @@ these objects are always available on globalThis:
 - `Job`: background queue facade (`Job.dispatch('JobName', payload, { timeout, tries, backoff, trackingId, log })`)
 - `Log`: application logging facade (`Log.debug`, `Log.info`, `Log.warn`, `Log.error`, `Log.table`)
 - `Config`: configuration facade (`Config.get('app.key', default)`, `Config.get('storage.default', 'public')`, `Config.get('socket.maxPayload', 1)`, `Config.has('app.key')`, `Config.register(name, config)`)
+- `Storage`: file system storage facade (`Storage.disk('name')`, `Storage.put(path, data)`, `Storage.get(path)`, `Storage.delete(path)`, `Storage.exists(path)`, `Storage.path(path)`, `Storage.move(from, to)`, `Storage.copy(from, to)`)
 - `Tracker`: request and telemetry tracking facade (`Tracker.sink`, `Tracker.capture(err, status)`, `Tracker.hasSinks`, `Tracker.drain`, `Tracker.export`)
 - `app(key)`: application instance helper (`app()`, `app('db')`, `app('logger')`, `app('env')`)
 
@@ -108,9 +109,7 @@ only these classes and utilities need explicit import:
 ```javascript
 import { Model } from 'dframework';          // for models/
 import { Paginator } from 'dframework';      // for manual pagination construction
-import { Storage } from 'dframework';        // for disk file operations (supports direct Storage.put, Storage.get, etc.)
 import { StorageDisk } from 'dframework';    // for custom disk instances
-import { Log } from 'dframework';            // for logging outside request context
 import { RateLimiter } from 'dframework';    // for rate limiting middleware
 import { Hash } from 'dframework';           // for manual bcrypt verify or make
 import { Locale } from 'dframework';         // for Locale.set / Locale.get

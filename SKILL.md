@@ -14,8 +14,8 @@ dframework is not a traditional express or node framework. it uses a laravel ins
 every agent working on dframework projects must follow these fundamental rules:
 
 1. never use `res.json()`, `res.send()`, `res.status()`, or `res.redirect()`; controllers must return global response helpers (`return json()`, `return render()`, `return redirect()`, `return back()`, `return abort()`, `return status()`, `return stream()`)
-2. never import global facades or response helpers (`Route`, `Socket`, `DB`, `Auth`, `Session`, `Job`, `Log`, `Config`, `Tracker`, `render`, `json`, `redirect`, `back`, `abort`, `status`, `stream`, `validate`, `sanitizeBody`, `t`, `ruby`, `escapeHtml`, `escapeJs`); they are attached to the global scope on startup
-3. only import specific framework components when required (`Model`, `Paginator`, `Storage`, `RateLimiter`, `Hash`, `Locale`, `Inflector`, `Env`, `SqlHelpers` from `'dframework'`)
+2. never import global facades or response helpers (`Route`, `Socket`, `DB`, `Auth`, `Session`, `Job`, `Log`, `Config`, `Storage`, `Tracker`, `render`, `json`, `redirect`, `back`, `abort`, `status`, `stream`, `validate`, `sanitizeBody`, `t`, `ruby`, `escapeHtml`, `escapeJs`); they are attached to the global scope on startup
+3. only import specific framework components when required (`Model`, `Paginator`, `RateLimiter`, `Hash`, `Locale`, `Inflector`, `Env`, `SqlHelpers` from `'dframework'`)
 4. always prioritize active record `Model` subclasses (`User.find(id)`, `User.with('profile').where('status', 'active').get()`, `static casts = { metadata: 'json' }`, `static fillable = ['name', 'email']`) over raw `DB.table()` or `DB.query()` for entity data access, relationships, and mutations; define `static fillable` or `static guarded` on models to protect against mass assignment vulnerabilities; all database queries must use parameterized bindings (`?` placeholders) and never interpolate raw variables into sql strings
 5. when consuming model relationships, always use standard async method calls (`await model.relation()`), concurrent resolvers (`await Promise.all([this.album(), this.genre()])`), or direct property access (`model.relation`); preloaded relations via `.with()` or `.load()` are cached in memory and resolve in zero database queries; never access or inspect private `_relations` directly
 6. verify frontend utility classes exist in `dstrn.css` before using them; never assume tailwind or bootstrap classes exist
@@ -67,7 +67,7 @@ load and review the relevant reference guide for deep specifications:
 before finalizing code in any dframework application:
 
 - [ ] verify all controller and middleware handlers use `return` with response helpers (no `res.json()` or `res.send()`)
-- [ ] verify no global facades (`DB`, `Route`, `Auth`, `Log`, `Config`, `Job`, `Session`, `Tracker`) were unnecessarily imported
+- [ ] verify no global facades (`DB`, `Route`, `Socket`, `Auth`, `Log`, `Config`, `Job`, `Session`, `Storage`, `Tracker`) were unnecessarily imported
 - [ ] verify middleware references use 'ClassName\@method' (e.g. 'AuthMiddleware\@requireAuth') and never short aliases like 'auth'
 - [ ] verify no manual `<link href="/css/dstrn.css">` or `<script src="/js/dstrn.js">` tags were added in `<head>`
 - [ ] verify `js/dstrn.js` and `css/dstrn.css` were not edited directly
