@@ -17,9 +17,9 @@ export default class SendWelcomeEmailJob {
     const user = await User.find(payload.userId);
     if (!user) return;
 
-    await Mailer.send(user.email, 'welcome to the platform', {
-      name: user.name
-    });
+    await Mail.to(user.email)
+      .subject('welcome to the platform')
+      .send('emails.welcome', { name: user.name });
   }
 }
 ```
@@ -30,18 +30,21 @@ use the global `Job` facade from anywhere (controllers, middlewares, socket hand
 
 ```javascript
 // in a controller
-Job.dispatch('SendWelcomeEmailJob', { userId: user.id }, { timeout: 30000, tries: 3 });
+Job.dispatch('SendWelcomeEmailJob', { userId: user.id }, { delay: 60, retry: 3 });
 ```
 
 - class level configuration: jobs can define static `timeout`, `tries`, and `backoff` directly on the class; options passed to `Job.dispatch()` override class defaults
 - payload must be json serializable (pass record ids instead of large active record model instances)
-- options parameter supports `timeout` (milliseconds, default 60000), `tries` (max retry count, default 1), `backoff` (exponential backoff base in ms), `trackingId` (correlation uuid), and `log` (boolean to force production lifecycle logging)
+- options parameter supports `delay` (seconds until available), `retry` (alias for tries, default 1), `tries` (max retry count, default 1), `timeout` (milliseconds, default 60000), `backoff` (exponential backoff base in ms), `queue` (queue channel name, default 'default'), `trackingId` (correlation uuid), and `log` (boolean to force production lifecycle logging)
+- queue drivers: supports `sync` (runs directly in process), `memory` (worker thread pool in memory), and `database` (persists to `jobs` and `failed_jobs` tables with atomic reservations and automatic retries)
 - request correlation: jobs dispatched from tracked requests (`.track()` or global tracking) automatically inherit `trackingId`, exposed as `this.trackingId` and `this.requestId` on the job instance; all logs emitted via `Log.info()` or `Log.error()` inside the job handler are automatically tagged with `[<trackingId>]`
 - route logging matrix: routes marked with `.log()` promote job dispatch and completion logs to `info` level; routes marked with both `.track()` and `.log()` output dispatch and completion logs at `info` level with the `[<trackingId>]` correlation tag
 - persistent worker pool: worker threads are only warmed and started if the application contains jobs in `jobs/`, meaning applications with zero jobs pay zero performance or memory overhead
 - persistent workers remain alive across sequential jobs to eliminate thread creation and database connection overhead
 - `Socket.broadcast()` and `Socket.setState()` called inside jobs are automatically relayed to the main process websocket server via internal IPC
 - configure worker pool settings in `config/app.js` via `queue.maxWorkers` (default 4), `queue.timeout` (default 60000), `queue.bootstrapTimeout` (default 30000), and `queue.shutdownTimeout` (default 30000)
+- dedicated worker process: run `dstrn queue:work` to process queued background jobs as a daemon (supports `--queue=name`, `--driver=database`, and `--once`)
+- queue lifecycle events: drivers emit `job:completed`, `job:failed`, and `job:retry` (with `{ job, error, attempt, delay }`) forwarded through the queue instance
 
 ### broadcasting from jobs
 

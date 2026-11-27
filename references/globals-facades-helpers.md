@@ -11,11 +11,12 @@ these objects are always available on globalThis:
 - `DB`: database query builder and connection facade (`DB.table`, `DB.query`, `DB.insert`, `DB.transaction`, `DB.inTransaction`, `DB.transactionDepth`)
 - `Auth`: user authentication facade (`Auth.check()`, `Auth.user()`, `Auth.id()`, `Auth.guard('admin')`, `Auth.login(user, data, perm)`, `Auth.logout()`, `Auth.flush()`)
 - `Session`: session storage facade (`Session.get()`, `Session.set()`, `Session.has()`, `Session.flash()`, `Session.forget()`, `Session.flush()`, `Session.permanent()`, `Session.id()`, `Session.regenerate()`)
-- `Job`: background queue facade (`Job.dispatch('JobName', payload, { timeout, tries, backoff, trackingId, log })`)
+- `Job`: background queue facade (`Job.dispatch('JobName', payload, { delay, retry, tries, timeout, backoff, queue })`)
 - `Log`: application logging facade (`Log.debug`, `Log.info`, `Log.warn`, `Log.error`, `Log.table`)
 - `Config`: configuration facade (`Config.get('app.key', default)`, `Config.get('storage.default', 'public')`, `Config.get('socket.maxPayload', 1)`, `Config.has('app.key')`, `Config.register(name, config)`)
 - `Storage`: file system storage facade (`Storage.disk('name')`, `Storage.put(path, data)`, `Storage.get(path)`, `Storage.delete(path)`, `Storage.exists(path)`, `Storage.path(path)`, `Storage.move(from, to)`, `Storage.copy(from, to)`)
 - `Tracker`: request and telemetry tracking facade (`Tracker.sink`, `Tracker.capture(err, status)`, `Tracker.hasSinks`, `Tracker.drain`, `Tracker.export`)
+- `Mail`: mail transport and template rendering facade (`Mail.to(recipient).send(view, data)`, `Mail.to(recipient).queue(view, data)`, `Mail.send(message)`, `Mail.raw(text)`, `Mail.mailer(name)`)
 - `app(key)`: application instance helper (`app()`, `app('db')`, `app('logger')`, `app('env')`)
 
 ```javascript

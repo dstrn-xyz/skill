@@ -118,7 +118,7 @@ response accessors:
 
 ## service fakes
 
-dframework provides test doubles and spies for background jobs, websocket events, and queues via `fake({ jobs: true, socket: true })`, `fakeJobs()` / `fakeSocket()`, or passing service names like `fake('jobs')` or `fake(['jobs', 'socket'])`. assertions are verified using top-level helpers or client methods, never called on global facades.
+dframework provides test doubles and spies for background jobs, websocket events, queues, and mail via `fake({ jobs: true, socket: true, mail: true })`, `fakeJobs()` / `fakeSocket()` / `fakeMail()`, or passing service names like `fake('jobs')` or `fake(['jobs', 'mail'])`. assertions are verified using top-level helpers or client methods, never called on global facades.
 
 ### faking background jobs
 
@@ -179,6 +179,29 @@ socket assertions:
 - `Tester.sent(event, callback)`: retrieve sent socket events matching filter
 - `Tester.broadcasted(event, callback)`: retrieve broadcasted socket events matching filter
 
+### faking mail
+
+calling `Tester.fake({ mail: true })` (or `Tester.fakeMail()`) intercepts mail delivery:
+
+```javascript
+import { test, Tester } from 'dframework/testing';
+
+test('sends welcome email on registration', async () => {
+  Tester.fakeMail();
+
+  await Tester.post('/register', { email: 'user@example.com' });
+
+  Tester.assertSentMail('emails.welcome');
+  Tester.assertSentMailCount(1);
+});
+```
+
+mail assertions:
+- `Tester.assertSentMail(criteria)`: assert email was sent matching template name or predicate callback receiving `{ to, cc, bcc, from, subject, view, template, data, replyTo, html, text }`
+- `Tester.assertQueuedMail(criteria)`: assert email was queued matching template name or predicate callback
+- `Tester.assertNothingMailSent()`: assert no email was sent or queued
+- `Tester.assertSentMailCount(count)`: assert exact number of sent emails
+
 ## database assertions and transactions
 
 wrap tests in automatic database rollbacks using `Tester.useDatabaseTransactions()` (or disable with `Tester.withoutDatabaseTransactions()`) or per callback with `Tester.useTransaction()`. tests execute inside an isolated transaction that rolls back upon test completion:
@@ -202,14 +225,14 @@ test('creates user in database', async () => {
 
 ## browser and page interaction tests
 
-the `browse()` client runs an in memory dom parser simulating browser rendering, form filling, dropdown selection, checkbox toggling, and button clicks without external browser binaries in ci. the simulated dom matches server rendered html via whitespace separated descendant selectors and `:not()` without running a client javascript runtime or complex combinators (such as `>`, `+`, or `~`):
+the `Tester.browse()` (or exported `browse()`) client runs an in memory dom parser simulating browser rendering, form filling, dropdown selection, checkbox toggling, and button clicks without external browser binaries in ci. the simulated dom matches server rendered html via whitespace separated descendant selectors and `:not()` without running a client javascript runtime or complex combinators (such as `>`, `+`, or `~`):
 
 ```javascript
-import { describe, it, browse } from 'dframework/testing';
+import { describe, it, Tester } from 'dframework/testing';
 
 describe('contact page interaction', () => {
   it('submits contact form and verifies thank you page', async () => {
-    const page = await browse('/contact');
+    const page = await Tester.browse('/contact');
 
     page.assertSee('contact our team');
     page.assertElement('form');
