@@ -109,6 +109,7 @@ only these classes and utilities need explicit import:
 
 ```javascript
 import { Model } from 'dframework';          // for models/
+import { Factory, fake } from 'dframework';  // for database/factories/ and seeders
 import { Paginator } from 'dframework';      // for manual pagination construction
 import { StorageDisk } from 'dframework';    // for custom disk instances
 import { RateLimiter } from 'dframework';    // for rate limiting middleware

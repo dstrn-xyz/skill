@@ -7,10 +7,12 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 - `dstrn init <name>`: scaffolds a fresh dframework application
 - `dstrn serve [--host=] [--port=]`: boots the development server with live reload and watcher
 - `dstrn test [target] [--watch] [--only] [--raw] [--reporter=]`: runs application tests using node native test runner (sets APP_ENV=testing)
-- `dstrn tinker [code]`: interactive repl with all models, facades, and helpers preloaded
+- `dstrn tinker [code]`: interactive repl with all models, factories, facades, framework utilities, and tab autocomplete preloaded
 - `dstrn key:generate`: generates and updates the 32 byte APP_KEY encryption key in .env
 - `dstrn run <command>`: runs a user command from console/commands/ (resolves `${name}.js` or `${name}Command.js`, forwards options and arguments)
 - `dstrn queue:work [--queue=] [--driver=] [--once]`: start processing background queue jobs as a daemon
+- `dstrn queue:status [--queue=] [--driver=] [--json]`: displays worker pool health, pending jobs, failures, and retry backoffs
+- `dstrn schedule:list [--json]`: lists registered scheduled tasks, intervals, next runs, and last exit statuses
 - `dstrn dispatch <job> [--payload=json]`: runs a job directly in the current process with an optional json payload
 
 ## database and migrations
@@ -18,6 +20,7 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 - `dstrn migrate`: runs all pending database migrations
 - `dstrn migrate:status`: displays batch status of all migrations
 - `dstrn migrate:rollback`: rolls back the latest migration batch
+- `dstrn migrate:squash [--schema-path=] [--prune] [--force]`: squashes applied migrations into `database/schema/<driver>-schema.sql`
 - `dstrn migrate:make <name>`: creates a timestamped migration file (infers table name from naming patterns like `create_users_table` or `add_role_to_users_table`)
 - `dstrn seed [seeder]`: executes database seeders
 - `dstrn seed:make <name>`: creates a new database seeder class
@@ -27,6 +30,7 @@ dframework provides a built in cli runner invoked with `dstrn <command>`. all co
 ## code generators
 
 - `dstrn make:model <name>`: generates a model class in models/
+- `dstrn make:factory <name> [--model=]`: generates a model factory class in database/factories/
 - `dstrn make:controller <name>`: generates a controller in controllers/
 - `dstrn make:middleware <name>`: generates a middleware class in middlewares/
 - `dstrn make:command <name>`: generates a console command in console/commands/ (appends Command suffix if omitted)

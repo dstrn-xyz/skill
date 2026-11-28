@@ -452,12 +452,13 @@ await DB.table('users').where('id', 1).update({ updated_at: SqlHelpers.raw('NOW(
 
 ## database transactions
 
-wrap database operations in transactions to ensure atomic commits across queries and active record models. transactions support nested savepoints and connection propagation.
+wrap database operations in `DB.transaction` to ensure atomic commits across queries and active record models without passing a connection handle. transactions support nested savepoints and automatic connection propagation via AsyncLocalStorage, and return the callback result:
 
 ```javascript
-await DB.transaction(async (conn) => {
-  await DB.table('users').where({ id: 1 }).update({ balance: 50 });
-  await TransactionLog.create({ user_id: 1, amount: 50 });
+const user = await DB.transaction(async () => {
+  const created = await User.create({ name: 'test' });
+  await TransactionLog.create({ user_id: created.id, amount: 50 });
+  return created;
 });
 
 // transaction inspection
@@ -647,18 +648,23 @@ const secret = await Storage.disk('secure').get('secrets/token.txt', 'utf8');
 - **disk capacity protection**: before writing, `Storage` verifies that the target filesystem has sufficient space for the payload plus a 100 megabyte safety buffer to prevent server disk exhaustion
 - **path traversal mitigation**: blocks null bytes (`\0`), resolves canonical paths within the disk root, rejects escaping path segments (`..`), and limits path depth to 10 segments
 
-## running migrations and seeders
+## running migrations, factories, and seeders
 
 ```bash
 dstrn migrate
 dstrn migrate:rollback
+dstrn migrate:squash --prune
+dstrn make:factory UserFactory --model=User
 dstrn seed
 ```
+
+model factories live in `database/factories/` extending `Factory` and support `User.factory().create()`, `User.factory(5).state(...).sequence(...).for(...).has(...).create()`, and `make()`.
 
 in production (`APP_ENV=production`), interactive confirmation prompts are displayed. pass `--force` to run non-interactively in automated deployment pipelines:
 
 ```bash
 dstrn migrate --force
 dstrn migrate:rollback --force
+dstrn migrate:squash --force
 dstrn seed --force
 ```

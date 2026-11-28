@@ -44,6 +44,7 @@ Job.dispatch('SendWelcomeEmailJob', { userId: user.id }, { delay: 60, retry: 3 }
 - `Socket.broadcast()` and `Socket.setState()` called inside jobs are automatically relayed to the main process websocket server via internal IPC
 - configure worker pool settings in `config/app.js` via `queue.maxWorkers` (default 4), `queue.timeout` (default 60000), `queue.bootstrapTimeout` (default 30000), and `queue.shutdownTimeout` (default 30000)
 - dedicated worker process: run `dstrn queue:work` to process queued background jobs as a daemon (supports `--queue=name`, `--driver=database`, and `--once`)
+- queue status inspection: run `dstrn queue:status` to inspect worker pool health, pending/reserved/retrying/failed counts, and backoff delays (supports `--queue=`, `--driver=`, and `--json`)
 - queue lifecycle events: drivers emit `job:completed`, `job:failed`, and `job:retry` (with `{ job, error, attempt, delay }`) forwarded through the queue instance
 
 ### broadcasting from jobs
@@ -112,6 +113,7 @@ export default class PruneExpiredSessionsCommand {
 
 - scheduled in `console/Schedule.js` (supports chainable `.args(['--option', 'val'])`)
 - run manually from CLI: `dstrn run PruneExpiredSessions [args]` (resolves both `${name}.js` and `${name}Command.js`, supports `--key value`, `--key=value`, boolean flags, and positional args accessible via `this.option()`, `this.hasOption()`, and `this.argument()`)
+- inspect schedule from CLI: `dstrn schedule:list [--json]` displays registered tasks, interval expressions, next runs, and last exit statuses
 
 ## websockets (socket router)
 
